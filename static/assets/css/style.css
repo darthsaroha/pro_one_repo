@@ -1,0 +1,126 @@
+@font-face {
+    font-family: "Ubuntu";
+    src: url("../font/ubuntu.woff2");
+    src: url("../font/ubuntu.woff2") format("embedded-opentype"), url("../font/ubuntu.woff2") format("woff2"), url("../font/ubuntu.woff2") format("woff2");
+    font-weight: 500;
+}
+
+body {
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 300;
+    padding-top: 10px;
+}
+
+.text-white {
+    color: #ffffff;
+}
+
+.card-title {
+    margin-bottom: 1.2rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.h1-responsive {
+    font-size: 150%;
+}
+
+.h2-responsive {
+    font-size: 145%;
+}
+
+.h3-responsive {
+    font-size: 135%;
+}
+
+.h4-responsive {
+    font-size: 135%;
+}
+
+.h5-responsive {
+    font-size: 135%;
+}
+
+@media (min-width: 576px) {
+    .h1-responsive {
+        font-size: 170%;
+    }
+    .h2-responsive {
+        font-size: 140%;
+    }
+    .h3-responsive {
+        font-size: 125%;
+    }
+    .h4-responsive {
+        font-size: 125%;
+    }
+    .h5-responsive {
+        font-size: 125%;
+    }
+}
+
+@media (min-width: 768px) {
+    .h1-responsive {
+        font-size: 200%;
+    }
+    .h2-responsive {
+        font-size: 170%;
+    }
+    .h3-responsive {
+        font-size: 140%;
+    }
+    .h4-responsive {
+        font-size: 125%;
+    }
+    .h5-responsive {
+        font-size: 125%;
+    }
+}
+
+@media (min-width: 992px) {
+    .h1-responsive {
+        font-size: 200%;
+    }
+    .h2-responsive {
+        font-size: 170%;
+    }
+    .h3-responsive {
+        font-size: 140%;
+    }
+    .h4-responsive {
+        font-size: 125%;
+    }
+    .h5-responsive {
+        font-size: 125%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .h1-responsive {
+        font-size: 250%;
+    }
+    .h2-responsive {
+        font-size: 200%;
+    }
+    .h3-responsive {
+        font-size: 170%;
+    }
+    .h4-responsive {
+        font-size: 140%;
+    }
+    .h5-responsive {
+        font-size: 125%;
+    }
+}
+
+a {
+    outline: 0;
+}

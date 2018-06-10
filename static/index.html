@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Board</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/shards.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/fontawesome-all.min.css">
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/components.js"></script>
+    <script type="text/javascript" src="/assets/js/main.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <template id="welcome_ID">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 offset-md-4">
+                    <center>
+                        <i class="far fa-clipboard fa-2x text-primary"></i>
+                        <h2>Boards</h2>
+                        <font class="text-muted">A Task Management App</font>
+                    </center>
+                    <hr>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Login</h4>
+                            <div id="loginMsg">
+                            </div>
+                            <form name="loginForm">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name="email" placeholder="Email Address.." required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="digest" minlength="5" placeholder="Password" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="fas fa-sign-in-alt"></i> <b> Login</b></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="subtitle">Join</h4>
+                            <div id="joinMsg">
+                            </div>
+                            <form name="joinForm">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name="email" placeholder="Email Address.." required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="digest" minlength="5" placeholder="Password" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" name="submit"><i class="fas fa-sign-out-alt"></i> <b> Join</b></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+                    <center>
+                        <b class="text-muted">By Love Saroha<br> &copy; <span id="cy"></span> </b>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="home_ID">
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-primary text-white ">
+                    <h5><i class="fas fa-leaf"></i> Dashboard</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2">Showing all boards..</h6>
+                    <a href="/#/" class="card-link" data-toggle="modal" data-target="#addBoardModal_ID"><i class="fas fa-plus"></i> Add New</a>
+                </div>
+            </div>
+            <br>
+            <div id="boardList_ID" class="card-columns"></div>
+        </div>
+        <!-- Modal -->
+        <div class="modal" id="addBoardModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header  text-white bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Board</h5>
+                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="aboardMsg"></div>
+                        <form name="aboardForm">
+                            <div class="form-group">
+                                <label class="label">Name</label>
+                                <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Description</label>
+                                <input type="text" class="form-control" name="desc" minlength="5" placeholder="Description.." required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal" id="rmBoardModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Remove Board</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="board_ID">
+        <div class="container">
+            <board-comp></board-comp>
+            <br>
+            <div id="taskList_ID" class="card-columns"></div>
+        </div>
+        <!-- Modal -->
+        <div class="modal" id="addListModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header  text-white bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New List</h5>
+                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="alistMsg"></div>
+                        <form name="alistForm">
+                            <div class="form-group">
+                                <label class="label">Name</label>
+                                <input type="text" class="form-control" name="name" minlength="2" placeholder="Name.." required>
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Description</label>
+                                <input type="text" class="form-control" name="desc" minlength="3" placeholder="Description.." required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal ••••••••••-->
+        <div class="modal" id="addTaskModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header  text-white bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
+                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="ataskMsg"></div>
+                        <form name="ataskForm">
+                            <div class="form-group">
+                                <label class="label">Content</label>
+                                <input type="text" class="form-control" name="content" minlength="5" placeholder="Content.." required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal ••••••••••-->
+        <div class="modal" id="editBoardModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header  text-white bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Board</h5>
+                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="eboardMsg"></div>
+                        <form name="eboardForm">
+                            <div class="form-group">
+                                <label class="label">Name</label>
+                                <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Description</label>
+                                <input type="text" class="form-control" name="desc" minlength="5" placeholder="Description.." required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
+                            </div>
+                        </form>
+                        <a style="cursor: pointer; color: var(--blue);" onclick="javascript: bdComp.delBoard();"><i class="fa fa-trash"></i> Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal ••••••••••-->
+        <div class="modal" id="viewListModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header  text-white bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">View List</h5>
+                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="elistMsg"></div>
+                        <form name="elistForm">
+                            <div class="form-group">
+                                <label class="label">Name</label>
+                                <input type="text" class="form-control" name="name" minlength="2" placeholder="Name.." required>
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Description</label>
+                                <input type="text" class="form-control" name="desc" minlength="3" placeholder="Description.." required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
+                            </div>
+                        </form>
+                        <a style="cursor: pointer; color: var(--blue);" onclick="javascript: bdComp.delList();"><i class="fa fa-trash"></i> Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal ••••••••••-->
+        <div class="modal" id="viewTaskModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header  text-white bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">View Task</h5>
+                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="nav nav-pills nav-fill" style="    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="otask-tab" data-toggle="tab" href="#otask" role="tab" aria-controls="otask" aria-selected="true">Overview</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="etask-tab" data-toggle="tab" href="#etask" role="tab" aria-controls="etask" aria-selected="false">Edit</a>
+                            </li>
+                        </ul>
+                        <br>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="otask" role="tabpanel" aria-labelledby="home-tab">
+                                <div id="taskCont_ID"></div>
+                            </div>
+                            <div class="tab-pane fade" id="etask" role="tabpanel" aria-labelledby="profile-tab">
+                                <div id="etaskMsg"></div>
+                                <form name="etaskForm">
+                                    <div class="form-group">
+                                        <label class="label">Content</label>
+                                        <input type="text" class="form-control" name="content" minlength="5" placeholder="Content.." required>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
+                                    </div>
+                                </form>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Move To</label>
+                                    <select class="custom-select" style="outline: 0;" id="listSel_ID">
+                                    </select>
+                                </div>
+                                <a style="cursor: pointer; color: var(--blue);" onclick="javascript: bdComp.delTask();"><i class="fa fa-trash"></i> Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <pro-one-view></pro-one-view>
+</body>
+
+</html>
