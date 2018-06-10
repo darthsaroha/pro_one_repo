@@ -10,6 +10,7 @@
 
 
 
+
 /* cyrillic */
 
 @font-face {
@@ -19,6 +20,7 @@
     src: local('Ubuntu Regular'), local('Ubuntu-Regular'), url(https://fonts.gstatic.com/s/ubuntu/v11/4iCs6KVjbNBYlgoKew72j00.woff2) format('woff2');
     unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 
 
 
@@ -34,6 +36,7 @@
 
 
 
+
 /* greek */
 
 @font-face {
@@ -46,6 +49,7 @@
 
 
 
+
 /* latin-ext */
 
 @font-face {
@@ -55,6 +59,7 @@
     src: local('Ubuntu Regular'), local('Ubuntu-Regular'), url(https://fonts.gstatic.com/s/ubuntu/v11/4iCs6KVjbNBYlgoKcQ72j00.woff2) format('woff2');
     unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
 
 
 
@@ -97,107 +102,6 @@ body {
     margin-bottom: 1.2rem;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: 300;
-    margin-bottom: 0.5rem;
-}
-
-.h1-responsive {
-    font-size: 150%;
-}
-
-.h2-responsive {
-    font-size: 145%;
-}
-
-.h3-responsive {
-    font-size: 135%;
-}
-
-.h4-responsive {
-    font-size: 135%;
-}
-
-.h5-responsive {
-    font-size: 135%;
-}
-
-@media (min-width: 576px) {
-    .h1-responsive {
-        font-size: 170%;
-    }
-    .h2-responsive {
-        font-size: 140%;
-    }
-    .h3-responsive {
-        font-size: 125%;
-    }
-    .h4-responsive {
-        font-size: 125%;
-    }
-    .h5-responsive {
-        font-size: 125%;
-    }
-}
-
-@media (min-width: 768px) {
-    .h1-responsive {
-        font-size: 200%;
-    }
-    .h2-responsive {
-        font-size: 170%;
-    }
-    .h3-responsive {
-        font-size: 140%;
-    }
-    .h4-responsive {
-        font-size: 125%;
-    }
-    .h5-responsive {
-        font-size: 125%;
-    }
-}
-
-@media (min-width: 992px) {
-    .h1-responsive {
-        font-size: 200%;
-    }
-    .h2-responsive {
-        font-size: 170%;
-    }
-    .h3-responsive {
-        font-size: 140%;
-    }
-    .h4-responsive {
-        font-size: 125%;
-    }
-    .h5-responsive {
-        font-size: 125%;
-    }
-}
-
-@media (min-width: 1200px) {
-    .h1-responsive {
-        font-size: 250%;
-    }
-    .h2-responsive {
-        font-size: 200%;
-    }
-    .h3-responsive {
-        font-size: 170%;
-    }
-    .h4-responsive {
-        font-size: 140%;
-    }
-    .h5-responsive {
-        font-size: 125%;
-    }
-}
 
 a {
     outline: 0;
