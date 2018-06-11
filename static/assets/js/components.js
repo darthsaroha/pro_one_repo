@@ -11,6 +11,7 @@ welComp.prototype.init = function() {
     document.querySelector(`form[name="joinForm"]`).addEventListener('submit', this.joinReq);
     let d = new Date();
     document.getElementById('cy').innerHTML = d.getFullYear();
+    document.getElementById('bloader').classList.add('d-none');
 }
 
 welComp.prototype.logReq = function(e) {
@@ -117,9 +118,10 @@ boardsComp.prototype.init = function() {
                 bdsc.appendChild(boardElem(data[i]));
             }
             document.getElementById('totBoards_ID').innerHTML = bdsComp.boards.length;
+            document.getElementById('bloader').classList.add('d-none');
         })
         .catch(function(error) {
-            console.log(error);
+            document.getElementById('bloader').classList.add('d-none');
         });
     document.querySelector(`form[name="aboardForm"]`).addEventListener('submit', this.create);
 }
@@ -209,9 +211,10 @@ boardComp.prototype.init = function(id) {
             for (let i = 0; i < data.tasks.length; i++) {
                 document.getElementById("taskList_ID").appendChild(listElem(data.tasks[i], i));
             }
+            document.getElementById('bloader').classList.add('d-none');
         })
         .catch(function(error) {
-            console.log(error);
+            document.getElementById('bloader').classList.add('d-none');
             window.location.hash = "/";
             return;
         });
