@@ -4,6 +4,14 @@ viewComp.prototype.init = function(temp) {
     document.querySelector(`pro-one-view`).innerHTML = '<div class="loader" id="bloader" style="position: absolute;top:0;bottom: 0;left: 0;right: 0;margin: auto;"></div>' + document.getElementById(temp + "_ID").innerHTML;
 }
 
+function loadElem() {
+    let el = document.createElement('div');
+    el.className = 'loader-sm';
+    el.id = 'smLoad_ID';
+    el.style = 'position: absolute;top:0;bottom: 0;left: 0;right: 0;margin: auto;';
+    return el;
+}
+
 function welComp() {}
 
 welComp.prototype.init = function() {
@@ -19,6 +27,7 @@ welComp.prototype.logReq = function(e) {
     if (this.email.value == "" || this.digest.value == "" || this.digest.value.length < 6) {
         return;
     }
+    this.parentNode.appendChild(loadElem());
     fetch("/user/auth", {
             method: 'post',
             headers: {
@@ -32,6 +41,7 @@ welComp.prototype.logReq = function(e) {
             window.location.hash = "/";
         })
         .catch(function(error) {
+            document.getElementById('smLoad_ID').remove();
             document.getElementById("loginMsg").innerHTML = `<div class="alert alert-warning" role="alert">No Record Found..</div>`;
         });
 }
@@ -41,6 +51,7 @@ welComp.prototype.joinReq = function(e) {
     if (this.email.value == "" || this.digest.value == "" || this.name.value == "" || this.digest.value.length < 6 || this.name.value.length < 6) {
         return;
     }
+    this.parentNode.appendChild(loadElem());
     fetch("/user/join", {
             method: 'post',
             headers: {
@@ -54,6 +65,7 @@ welComp.prototype.joinReq = function(e) {
             window.location.hash = "/";
         })
         .catch(function(error) {
+            document.getElementById('smLoad_ID').remove();
             document.getElementById("joinMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Create New Record..</div>`;
         });
 }
@@ -129,17 +141,19 @@ boardsComp.prototype.init = function() {
 boardsComp.prototype.create = function(e) {
     e.preventDefault();
     let u = JSON.parse(localStorage.getItem("pro-one-user-data"));
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/create?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{ "name" : "${this.name.value}", "desc": "${this.desc.value}"}` })
         .then(data => data.json())
         .then(data => {
             document.getElementById(`boardList_ID`).appendChild(boardElem(data));
             this.reset();
             bdsComp.boards.push(data);
+            document.getElementById('smLoad_ID').remove();
             document.getElementById('totBoards_ID').innerHTML = bdsComp.boards.length;
             $('#addBoardModal_ID').modal('hide');
         })
         .catch(function(error) {
-            console.log(error);
+            document.getElementById('smLoad_ID').remove();
             document.getElementById("aboardMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Add New Board..</div>`;
         });
 }
@@ -223,6 +237,7 @@ boardComp.prototype.init = function(id) {
 boardComp.prototype.editBoard = function(e) {
     e.preventDefault();
     let u = JSON.parse(localStorage.getItem("pro-one-user-data"));
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/update?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], {
             method: 'post',
             headers: {
@@ -233,11 +248,13 @@ boardComp.prototype.editBoard = function(e) {
         .then(data => data.json())
         .then(data => {
             let c = document.querySelector(`board-comp`);
+            document.getElementById('smLoad_ID').remove();
             c.childNodes[1].childNodes[1].innerHTML = `<h5><i class="far fa-clipboard"></i> ${this.name.value}</h5>`;
             c.childNodes[1].childNodes[3].childNodes[1].innerHTML = this.desc.value;
             document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-success" role="alert">Succesfully Updated Board..</div>`;
         })
         .catch(function(error) {
+            document.getElementById('smLoad_ID').remove();
             document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Update Board..</div>`;
         });
 }

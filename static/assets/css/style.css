@@ -66,6 +66,26 @@
     }
 }
 
+.loader-sm {
+    border: 16px solid #f3f3f3;
+    /* Light grey */
+    border-top: 16px solid var(--blue);
+    /* Blue */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 html {
     /* Adjust font size */
     font-size: 100%;
@@ -103,4 +123,8 @@ a {
 
 .alert {
     box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+}
+
+.card {
+    border-radius: 0;
 }
