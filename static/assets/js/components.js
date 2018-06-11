@@ -1,7 +1,7 @@
 function viewComp(temp) {}
 
 viewComp.prototype.init = function(temp) {
-    document.querySelector(`pro-one-view`).innerHTML = document.getElementById(temp + "_ID").innerHTML;
+    document.querySelector(`pro-one-view`).innerHTML = '<div class="loader" id="bloader" style="position: absolute;top:0;bottom: 0;left: 0;right: 0;margin: auto;"></div>' + document.getElementById(temp + "_ID").innerHTML;
 }
 
 function welComp() {}
