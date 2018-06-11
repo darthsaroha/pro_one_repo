@@ -285,6 +285,7 @@ boardComp.prototype.addList = function(e) {
     let u = JSON.parse(localStorage.getItem("pro-one-user-data"));
     let list = { "i": bdComp.board.stats[0], "n": this.name.value, "d": this.desc.value, "ts": [] };
     bdComp.board.tasks.push(list);
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], {
             method: 'post',
             headers: {
@@ -296,11 +297,13 @@ boardComp.prototype.addList = function(e) {
         .then(data => {
             document.getElementById('taskList_ID').appendChild(listElem(list, (bdComp.board.tasks.length - 1)));
             this.reset();
+            document.getElementById('smLoad_ID').remove();
             $('#addListModal_ID').modal('hide');
         })
         .catch(function(error) {
             bdComp.board.stats[2]--;
             bdComp.board.tasks.pop();
+            document.getElementById('smLoad_ID').remove();
             document.getElementById("alistMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Add New List..</div>`;
         });
 }
@@ -311,16 +314,19 @@ boardComp.prototype.editList = function(e) {
     let bk = { n: bdComp.board.tasks[bdComp.listi].n, d: bdComp.board.tasks[bdComp.listi].d };
     bdComp.board.tasks[bdComp.listi].n = this.name.value;
     bdComp.board.tasks[bdComp.listi].d = this.desc.value;
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(bdComp.board.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(bdComp.board.tasks))} , "id" : "${bdComp.board.id}"}` })
         .then(data => data.json())
         .then(data => {
             bdComp.liste.childNodes[1].childNodes[1].childNodes[0].innerHTML = this.name.value;
             bdComp.liste.childNodes[1].childNodes[3].innerHTML = this.desc.value;
+            document.getElementById('smLoad_ID').remove();
             document.getElementById("elistMsg").innerHTML = `<div class="alert alert-success" role="alert">Succesfully Updated List..</div>`;
         })
         .catch(function(error) {
             bdComp.board.tasks[bdComp.listi].n = bk.n;
             bdComp.board.tasks[bdComp.listi].d = bk.d;
+            document.getElementById('smLoad_ID').remove();
             document.getElementById("elistMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Update List..</div>`;
         });
 }
@@ -330,14 +336,17 @@ boardComp.prototype.delList = function() {
     let bk = [...bdComp.board.tasks];
     bdComp.board.stats[2]--;
     bdComp.board.tasks.splice(bdComp.listi, 1);
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(bdComp.board.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(bdComp.board.tasks))} , "id" : "${bdComp.board.id}"}` })
         .then(data => data.json())
         .then(data => {
             bdComp.liste.remove();
             $("#viewListModal_ID").modal("hide");
+            document.getElementById('smLoad_ID').remove();
         })
         .catch(function(error) {
             bdComp.board.stats[2]++;
+            document.getElementById('smLoad_ID').remove();
             bdComp.board.tasks = bk;
         });
 }
@@ -347,14 +356,17 @@ boardComp.prototype.editTask = function(e) {
     let u = JSON.parse(localStorage.getItem("pro-one-user-data"));
     let bk = { c: bdComp.board.tasks[bdComp.taski[0]].ts[bdComp.taski[1]].c };
     bdComp.board.tasks[bdComp.taski[0]].ts[bdComp.taski[1]].c = this.content.value;
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(bdComp.board.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(bdComp.board.tasks))} , "id" : "${bdComp.board.id}"}` })
         .then(data => data.json())
         .then(data => {
+            document.getElementById('smLoad_ID').remove();
             bdComp.taske.childNodes[1].childNodes[1].innerHTML = this.content.value;
             document.getElementById("taskCont_ID").innerHTML = `<b class="text-muted">Content</b><h5 class="card-title">${this.content.value}</h5>`;
             document.getElementById("etaskMsg").innerHTML = `<div class="alert alert-success" role="alert">Succesfully Updated Task..</div>`;
         })
         .catch(function(error) {
+            document.getElementById('smLoad_ID').remove();
             bdComp.board.tasks[bdComp.taski[0]].ts[bdComp.taski[1]].c = bk.c;
             document.getElementById("etaskMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Update Task..</div>`;
         });
@@ -405,6 +417,7 @@ boardComp.prototype.moveTask = function(e) {
     }
     bdComp.board.tasks[bdComp.taski[0]].ts.splice(bdComp.taski[1], 1);
     bdComp.board.tasks[this.value].ts.push(t);
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], {
             method: 'post',
             headers: {
@@ -415,12 +428,15 @@ boardComp.prototype.moveTask = function(e) {
         .then(data => data.json())
         .then(data => {
             bdComp.taske.remove();
+            document.getElementById('smLoad_ID').remove();
             let ti = bdComp.board.tasks[this.value].ts.length - 1;
             bdComp.taske = taskElem(t, this.value, ti);
             document.getElementById(`listTask${bdComp.board.tasks[this.value].i}_ID`).appendChild(bdComp.taske);
             bdComp.taski = [this.value, ti];
         })
-        .catch(function(error) {});
+        .catch(function(error) {
+            document.getElementById('smLoad_ID').remove();
+        });
 }
 
 boardComp.prototype.delTask = function() {
@@ -428,14 +444,17 @@ boardComp.prototype.delTask = function() {
     bdComp.board.stats[3]--;
     let bk = [...bdComp.board.tasks[bdComp.taski[0]].ts];
     bdComp.board.tasks[bdComp.taski[0]].ts.splice(bdComp.taski[1], 1);
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(bdComp.board.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(bdComp.board.tasks))} , "id" : "${bdComp.board.id}"}` })
         .then(data => data.json())
         .then(data => {
             bdComp.taske.remove();
+            document.getElementById('smLoad_ID').remove();
             $("#viewTaskModal_ID").modal("hide");
         })
         .catch(function(error) {
             bdComp.board.stats[3]++;
+            document.getElementById('smLoad_ID').remove();
             bdComp.board.tasks[bdComp.taski[0]].ts = bk;
         });
 }
@@ -447,6 +466,7 @@ boardComp.prototype.addTask = function(e) {
     bdComp.board.stats[3]++;
     let task = { "c": this.content.value };
     bdComp.board.tasks[bdComp.listi].ts.push(task);
+    this.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], {
             method: 'post',
             headers: {
@@ -459,10 +479,12 @@ boardComp.prototype.addTask = function(e) {
             bdComp.liste.childNodes[7].appendChild(taskElem(task, bdComp.listi, (bdComp.board.tasks[bdComp.listi].ts.length - 1)));
             this.reset();
             $('#addTaskModal_ID').modal('hide');
+            document.getElementById('smLoad_ID').remove();
         })
         .catch(function(error) {
             bdComp.board.stats[3]--;
             bdComp.board.tasks[bdComp.listi].ts.pop();
+            document.getElementById('smLoad_ID').remove();
             document.getElementById("alistMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Add New List..</div>`;
         });
 }
