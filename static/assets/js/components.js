@@ -331,12 +331,12 @@ boardComp.prototype.editList = function(e) {
         });
 }
 
-boardComp.prototype.delList = function() {
+boardComp.prototype.delList = function(pn) {
     let u = JSON.parse(localStorage.getItem("pro-one-user-data"));
     let bk = [...bdComp.board.tasks];
     bdComp.board.stats[2]--;
     bdComp.board.tasks.splice(bdComp.listi, 1);
-    this.parentNode.appendChild(loadElem());
+    pn.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(bdComp.board.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(bdComp.board.tasks))} , "id" : "${bdComp.board.id}"}` })
         .then(data => data.json())
         .then(data => {
@@ -439,12 +439,12 @@ boardComp.prototype.moveTask = function(e) {
         });
 }
 
-boardComp.prototype.delTask = function() {
+boardComp.prototype.delTask = function(pn) {
     let u = JSON.parse(localStorage.getItem("pro-one-user-data"));
     bdComp.board.stats[3]--;
     let bk = [...bdComp.board.tasks[bdComp.taski[0]].ts];
     bdComp.board.tasks[bdComp.taski[0]].ts.splice(bdComp.taski[1], 1);
-    this.parentNode.appendChild(loadElem());
+    pn.parentNode.appendChild(loadElem());
     fetch("/user/board/update/task?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(bdComp.board.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(bdComp.board.tasks))} , "id" : "${bdComp.board.id}"}` })
         .then(data => data.json())
         .then(data => {
