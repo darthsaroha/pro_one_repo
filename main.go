@@ -34,6 +34,7 @@ type board struct {
 	Desc       string `json:"desc"`
 	Tasks      string `json:"tasks"`
 	Stats      string `json:"stats"`
+	Conf       string `json:"conf"`
 	Created_at string `json:"created_at"`
 }
 
@@ -43,6 +44,7 @@ type user struct {
 	Password_digest string    `json:"digest"`
 	Email           string    `json:"email"`
 	Auth            [3]string `json:"auth"`
+	Conf            string    `json:"conf"`
 	Created_at      string    `json:"created_at"`
 }
 
@@ -89,13 +91,34 @@ func main() {
 			http.Error(res, "INVREQ", 500)
 			return
 		}
-		if err := db.QueryRow("SELECT uid , uname , uemail , ucreated_at FROM pr_one_users WHERE uemail = ? AND upassword_digest = ?;", u.Email, encode(u.Password_digest)).Scan(&u.Auth[0], &u.Name, &u.Email, &u.Created_at); err != nil {
+		if err := db.QueryRow("SELECT uid , uname ,uconf, uemail , ucreated_at FROM pr_one_users WHERE uemail = ? AND upassword_digest = ?;", u.Email, encode(u.Password_digest)).Scan(&u.Auth[0], &u.Name, &u.Conf, &u.Email, &u.Created_at); err != nil {
 			http.Error(res, "NOREC", 500)
 			return
 		}
 		u.genKeys()
 		res.Header().Set("Content-Type", "application/json")
-		res.Write([]byte("{\"name\" : \"" + u.Name + "\",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
+		res.Write([]byte("{\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
+	})
+	/////////////////////////////////////////////
+	mux.HandleFunc("/user/update/conf", func(res http.ResponseWriter, req *http.Request) {
+		var u user
+		defer req.Body.Close()
+		if json.NewDecoder(req.Body).Decode(&u) != nil {
+			http.Error(res, "INVREQ", 500)
+			return
+		}
+		if u.authAcs(req.FormValue("auth0"), req.FormValue("auth2")) == false {
+			http.Error(res, "NOACS", 500)
+			return
+		}
+		stm, _ := db.Prepare("UPDATE pr_one_users SET uconf = ? ,uupdated_at = ? WHERE uid = ?;")
+		defer stm.Close()
+		if _, err := stm.Exec(u.Conf, time.Now(), u.Auth[0]); err != nil {
+			http.Error(res, "NOUPD", 500)
+			return
+		}
+		res.Header().Set("Content-Type", "application/json")
+		res.Write([]byte("{\"status\" : \"Updated\"}"))
 	})
 	/////////////////////////////////////////////
 	mux.HandleFunc("/user/join", func(res http.ResponseWriter, req *http.Request) {
@@ -107,16 +130,17 @@ func main() {
 			http.Error(res, "INVREQ", 500)
 			return
 		}
+		u.Conf = "{\"cs\": 0}"
 		u.Auth[0] = u.Auth[0][2:4] + u.Auth[0][5:7] + u.Auth[0][8:10] + u.Auth[0][17:19] + u.Auth[0][20:22]
-		stm, _ := db.Prepare("INSERT INTO pr_one_users (uid,uemail , uname , upassword_digest , ucreated_at , uupdated_at) VALUES (? ,? ,?, ?, ?,?);")
+		stm, _ := db.Prepare("INSERT INTO pr_one_users (uid,uemail , uname ,uconf, upassword_digest , ucreated_at , uupdated_at) VALUES (? ,? ,?, ?, ?,?,?);")
 		defer stm.Close()
-		if _, err := stm.Exec(u.Auth[0], u.Email, u.Name, encode(u.Password_digest), time.Now(), time.Now()); err != nil {
+		if _, err := stm.Exec(u.Auth[0], u.Email, u.Name, u.Conf, encode(u.Password_digest), time.Now(), time.Now()); err != nil {
 			http.Error(res, "NOINS", 500)
 			return
 		}
 		u.genKeys()
 		res.Header().Set("Content-Type", "application/json")
-		res.Write([]byte("{\"name\" : \"" + u.Name + "\",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
+		res.Write([]byte("{\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
 	})
 	/////////////////////////////////////////////
 	mux.HandleFunc("/user/boards", func(res http.ResponseWriter, req *http.Request) {
@@ -163,11 +187,12 @@ func main() {
 		}
 		b.Created_at = time.Now().String()
 		b.Id = b.Created_at[2:4] + b.Created_at[5:7] + b.Created_at[8:10] + b.Created_at[17:19] + b.Created_at[20:22]
-		stm, _ := db.Prepare("INSERT INTO pr_one_boards (bid,bname ,bdesc,btasks,bstats,bcreated_at , bupdated_at) VALUES (?,?,?,? ,? ,?, ?);")
+		stm, _ := db.Prepare("INSERT INTO pr_one_boards (bid,bname ,bconf,bdesc,btasks,bstats,bcreated_at , bupdated_at) VALUES (?,?,?,? ,? ,?, ?,?);")
 		defer stm.Close()
+		b.Conf = "{\"cs\": 0}"
 		b.Stats = "[2,0,2,0,0]"
 		b.Tasks = "[{\"i\": 1,\"n\" : \"Todo\",\"d\" : \"Todo List Description\",\"ts\" : []},{\"i\": 2,\"n\" : \"Complete\",\"d\" : \"Complete List Description\",\"ts\" : []}]"
-		if _, err := stm.Exec(b.Id, b.Name, b.Desc, b.Tasks, b.Stats, time.Now(), time.Now()); err != nil {
+		if _, err := stm.Exec(b.Id, b.Name, b.Conf, b.Desc, b.Tasks, b.Stats, time.Now(), time.Now()); err != nil {
 			http.Error(res, "NOINS", 500)
 			return
 		}
@@ -192,7 +217,7 @@ func main() {
 		}
 		b.Id = req.FormValue("bdi")
 		bdi, _ := decrypt(b.Id, []byte(req.FormValue("auth2")[:32]))
-		if err := db.QueryRow("SELECT bname , bdesc ,btasks,bstats, bcreated_at FROM pr_one_boards WHERE bid = ?;", bdi).Scan(&b.Name, &b.Desc, &b.Tasks, &b.Stats, &b.Created_at); err != nil {
+		if err := db.QueryRow("SELECT bname , bdesc ,bconf,btasks,bstats, bcreated_at FROM pr_one_boards WHERE bid = ?;", bdi).Scan(&b.Name, &b.Desc, &b.Conf, &b.Tasks, &b.Stats, &b.Created_at); err != nil {
 			http.Error(res, "NOREC", 500)
 			return
 		}

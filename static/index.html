@@ -124,16 +124,36 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal" id="rmBoardModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div class="modal" id="viewUserModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Remove Board</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                    <div class="modal-header text-white bg-primary">
+                        <h5 class="modal-title" id="exampleModalLabel">View User</h5>
+                        <button type="button" class="close" style="outline: 0;" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
+                        <ul class="nav nav-pills nav-fill" style="    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="ouser-tab" data-toggle="tab" href="#ouser" role="tab" aria-controls="ouser" aria-selected="true">Overview</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="puser-tab" data-toggle="tab" href="#puser" role="tab" aria-controls="puser" aria-selected="false">Preferences</a>
+                            </li>
+                        </ul>
+                        <br>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="ouser" role="tabpanel" aria-labelledby="ouser-tab">
+                            </div>
+                            <div class="tab-pane fade" id="puser" role="tabpanel" aria-labelledby="puser-tab">
+                                <label class="label">Color Schemes</label>
+                                <div class="col-12">
+                                    <colsch-comp class="row" style="border: 1px solid #eee;"></colsch-comp>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

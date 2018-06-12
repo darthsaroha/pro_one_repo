@@ -4,10 +4,21 @@ let vwComp = new viewComp();
 let wlComp = new welComp();
 let bdsComp = new boardsComp();
 let bdComp = new boardComp();
+let apComp = new appComp();
+let clSchms = ["#007bff", "#E84A5F", "#CC527A", "#2F9599"];
 
 function initApp(e) {
     e.preventDefault();
     let url = window.location.hash.split("/");
+    if (url[1] != "welcome") {
+        if (localStorage.getItem("pro-one-user-data") == null) {
+            window.location.hash = "/welcome";
+            return;
+        }
+        if (apComp.user.email == null) {
+            apComp.user = JSON.parse(localStorage.getItem("pro-one-user-data"));
+        }
+    }
     switch (url[1]) {
         case "welcome":
             vwComp.init("welcome");
@@ -15,18 +26,10 @@ function initApp(e) {
             localStorage.clear();
             break;
         case "":
-            if (localStorage.getItem("pro-one-user-data") == null) {
-                window.location.hash = "/welcome";
-                return;
-            }
             vwComp.init("home");
             bdsComp.init();
             break;
         case "board":
-            if (localStorage.getItem("pro-one-user-data") == null) {
-                window.location.hash = "/welcome";
-                return;
-            }
             vwComp.init("board");
             bdComp.init(url[2]);
             break;

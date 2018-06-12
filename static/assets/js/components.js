@@ -1,5 +1,9 @@
 function viewComp(temp) {}
 
+function appComp() {
+    this.user = {};
+}
+
 viewComp.prototype.init = function(temp) {
     document.querySelector(`pro-one-view`).innerHTML = '<div class="loader" id="bloader" style="position: absolute;top:0;bottom: 0;left: 0;right: 0;margin: auto;"></div>' + document.getElementById(temp + "_ID").innerHTML;
 }
@@ -20,6 +24,7 @@ welComp.prototype.init = function() {
     let d = new Date();
     document.getElementById('cy').innerHTML = d.getFullYear();
     document.getElementById('bloader').classList.add('d-none');
+    document.documentElement.style.setProperty('--blue', clSchms[0]);
 }
 
 welComp.prototype.logReq = function(e) {
@@ -93,17 +98,49 @@ function boardElem(data) {
 function boardsComp() {
     this.boarde = {};
     this.boardi = 0;
+    this.scl = {};
     this.boards = [];
+}
+
+function colElem(i, u) {
+    let e = document.createElement('div');
+    e.data = i;
+    e.className = 'col-2';
+    e.style = `background-color: ${clSchms[i]}; cursor: pointer; height: 40px; margin: 4px; text-align: center; padding-top: 10px; color: #fff;`;
+    if (i == apComp.user.conf.cs) {
+        bdsComp.scl = e;
+        e.innerHTML = '<i class="fas fa-check"></i>';
+    }
+    e.addEventListener('click', function(e) {
+        this.parentNode.appendChild(loadElem());
+        let bk = apComp.user.conf;
+        apComp.user.conf.cs = this.data;
+        fetch("/user/update/conf?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'patch', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"conf" : "{\\"cs\\":${this.data}}"}` })
+            .then(data => data.json())
+            .then(data => {
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                bdsComp.scl.innerHTML = '';
+                bdsComp.scl = this;
+                localStorage.setItem("pro-one-user-data", JSON.stringify(apComp.user));
+                document.documentElement.style.setProperty('--blue', clSchms[this.data]);
+                document.getElementById('smLoad_ID').remove();
+            })
+            .catch(function(error) {
+                document.getElementById('smLoad_ID').remove();
+            });
+    });
+    return e;
 }
 
 boardsComp.prototype.init = function() {
     let u = JSON.parse(localStorage.getItem("pro-one-user-data"));
+    document.documentElement.style.setProperty('--blue', clSchms[u.conf.cs]);
     let bdsc = document.getElementById(`boardList_ID`);
     let e = document.createElement('div');
     e.className = 'card';
     e.innerHTML = `
       <div class="card-body" style="text-align: center;">
-      <img src="https://www.gravatar.com/avatar/${md5(u.email)}" class="img-fluid" style="margin-bottom: 10px;">
+      <img src="https://www.gravatar.com/avatar/${md5(u.email)}" id="usrImg_ID"  class="img-fluid" style="margin-bottom: 10px; border-radius: 3px; cursor: pointer;">
   <h4 class="card-title">${u.name}</h4>
     <h6 class="card-subtitle mb-2 text-muted">${u.email}</h6>
         <a href="/#/welcome" class="card-link"><i class="fas fa-power-off"></i> Log Out</a>
@@ -135,7 +172,15 @@ boardsComp.prototype.init = function() {
         .catch(function(error) {
             document.getElementById('bloader').classList.add('d-none');
         });
+    let csh = document.querySelector(`colsch-comp`);
     document.querySelector(`form[name="aboardForm"]`).addEventListener('submit', this.create);
+    document.getElementById('usrImg_ID').addEventListener('click', function(e) {
+        $("#viewUserModal_ID").modal('show');
+        csh.innerHTML = ``;
+        for (let i = 0; i < clSchms.length; i++) {
+            csh.appendChild(colElem(i, u));
+        }
+    });
 }
 
 boardsComp.prototype.create = function(e) {
@@ -165,7 +210,7 @@ function listElem(data, li) {
   <div class="card-body">
   <h4 class="card-title"><a style="cursor: pointer;" data-toggle="modal" data-target="#viewListModal_ID">${data.n}</a></h4>
     <h6 class="card-subtitle mb-2 text-muted">${data.d}</h6>
-    <a class="card-link"  onclick="javascript: bdComp.liste = this.parentNode; bdComp.listi = '${li}';" data-toggle="modal" style="cursor: pointer; color: #007bff;" data-target="#addTaskModal_ID"><i class="fas fa-plus"></i> Add Task</a>
+    <a class="card-link"  onclick="javascript: bdComp.liste = this.parentNode; bdComp.listi = '${li}';" data-toggle="modal" style="cursor: pointer; color: var(--blue);" data-target="#addTaskModal_ID"><i class="fas fa-plus"></i> Add Task</a>
 <div style="padding-top: 9px;" id="listTask${data.i}_ID"></div>
 </div>
     `;
