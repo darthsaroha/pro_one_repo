@@ -47,7 +47,7 @@ welComp.prototype.logReq = function(e) {
         })
         .catch(function(error) {
             document.getElementById('smLoad_ID').remove();
-            document.getElementById("loginMsg").innerHTML = `<div class="alert alert-warning" role="alert">No Record Found..</div>`;
+            document.getElementById("loginMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> No Record Found..</div>`;
         });
 }
 
@@ -71,7 +71,7 @@ welComp.prototype.joinReq = function(e) {
         })
         .catch(function(error) {
             document.getElementById('smLoad_ID').remove();
-            document.getElementById("joinMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Create New Record..</div>`;
+            document.getElementById("joinMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> Cannot Create New Record..</div>`;
         });
 }
 
@@ -199,7 +199,7 @@ boardsComp.prototype.create = function(e) {
         })
         .catch(function(error) {
             document.getElementById('smLoad_ID').remove();
-            document.getElementById("aboardMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Add New Board..</div>`;
+            document.getElementById("aboardMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> Cannot Add New Board..</div>`;
         });
 }
 
@@ -300,7 +300,7 @@ boardComp.prototype.editBoard = function(e) {
             headers: {
                 "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
             },
-            body: `{"name" : "${this.name.value}" ,"desc" : "${this.desc.value}", "id" : "${bdComp.board.id}"}`
+            body: `{"name" : "${this.name.value}" ,"desc" : "${this.desc.value}", "id" : "${bdComp.board.id}","conf" : "{\\"cs\\":${bdComp.board.conf.cs}}"}`
         })
         .then(data => data.json())
         .then(data => {
@@ -308,11 +308,11 @@ boardComp.prototype.editBoard = function(e) {
             document.getElementById('smLoad_ID').remove();
             c.childNodes[1].childNodes[1].innerHTML = `<h5><i class="far fa-clipboard"></i> ${this.name.value}</h5>`;
             c.childNodes[1].childNodes[3].childNodes[1].innerHTML = this.desc.value;
-            document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-success" role="alert">Succesfully Updated Board..</div>`;
+            document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-success" role="alert"><i class="fas fa-check" style="color: var(--blue);"></i> Succesfully Updated Board..</div>`;
         })
         .catch(function(error) {
             document.getElementById('smLoad_ID').remove();
-            document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Update Board..</div>`;
+            document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> Cannot Update Board..</div>`;
         });
 }
 
@@ -331,7 +331,7 @@ boardComp.prototype.delBoard = function() {
             window.location.hash = "/";
         })
         .catch(function(error) {
-            document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Delete Board..</div>`;
+            document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> Cannot Delete Board..</div>`;
         });
 }
 
@@ -390,7 +390,7 @@ boardComp.prototype.addList = function(e) {
             bdComp.board.stats[2]--;
             bdComp.board.tasks.pop();
             document.getElementById('smLoad_ID').remove();
-            document.getElementById("alistMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Add New List..</div>`;
+            document.getElementById("alistMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> Cannot Add New List..</div>`;
         });
 }
 
@@ -407,13 +407,13 @@ boardComp.prototype.editList = function(e) {
             bdComp.liste.childNodes[1].childNodes[1].childNodes[0].innerHTML = this.name.value;
             bdComp.liste.childNodes[1].childNodes[3].innerHTML = this.desc.value;
             document.getElementById('smLoad_ID').remove();
-            document.getElementById("elistMsg").innerHTML = `<div class="alert alert-success" role="alert">Succesfully Updated List..</div>`;
+            document.getElementById("elistMsg").innerHTML = `<div class="alert alert-success" role="alert"><i class="fas fa-check" style="color: var(--blue);"></i> Succesfully Updated List..</div>`;
         })
         .catch(function(error) {
             bdComp.board.tasks[bdComp.listi].n = bk.n;
             bdComp.board.tasks[bdComp.listi].d = bk.d;
             document.getElementById('smLoad_ID').remove();
-            document.getElementById("elistMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Update List..</div>`;
+            document.getElementById("elistMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> Cannot Update List..</div>`;
         });
 }
 
@@ -449,12 +449,12 @@ boardComp.prototype.editTask = function(e) {
             document.getElementById('smLoad_ID').remove();
             bdComp.taske.childNodes[1].childNodes[1].innerHTML = this.content.value;
             document.getElementById("taskCont_ID").innerHTML = `<b class="text-muted">Content</b><h5 class="card-title">${this.content.value}</h5>`;
-            document.getElementById("etaskMsg").innerHTML = `<div class="alert alert-success" role="alert">Succesfully Updated Task..</div>`;
+            document.getElementById("etaskMsg").innerHTML = `<div class="alert alert-success" role="alert"><i class="fas fa-check" style="color: var(--blue);"></i> Succesfully Updated Task..</div>`;
         })
         .catch(function(error) {
             document.getElementById('smLoad_ID').remove();
             bdComp.board.tasks[bdComp.taski[0]].ts[bdComp.taski[1]].c = bk.c;
-            document.getElementById("etaskMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Update Task..</div>`;
+            document.getElementById("etaskMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> Cannot Update Task..</div>`;
         });
 }
 
@@ -571,6 +571,6 @@ boardComp.prototype.addTask = function(e) {
             bdComp.board.stats[3]--;
             bdComp.board.tasks[bdComp.listi].ts.pop();
             document.getElementById('smLoad_ID').remove();
-            document.getElementById("alistMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Add New List..</div>`;
+            document.getElementById("alistMsg").innerHTML = `<div class="alert alert-warning" role="alert"><i class="fas fa-exclamation" style="color: var(--blue);"></i> Cannot Add New List..</div>`;
         });
 }
