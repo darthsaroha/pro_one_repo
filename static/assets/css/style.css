@@ -52,10 +52,6 @@
     border-top: 16px solid var(--blue);
     /* Blue */
     border-radius: 50%;
-    background-color: #fff;
-    -webkit-box-shadow: 1px 1px 15px -2px rgba(136, 136, 136, 1);
-    -moz-box-shadow: 1px 1px 15px -2px rgba(136, 136, 136, 1);
-    box-shadow: 1px 1px 15px -2px rgba(136, 136, 136, 1);
     width: 100px;
     height: 100px;
     animation: spin 2s linear infinite;
@@ -75,13 +71,9 @@
     /* Light grey */
     border-top: 16px solid var(--blue);
     /* Blue */
-    background-color: #fff;
     border-radius: 50%;
     width: 60px;
     height: 60px;
-    -webkit-box-shadow: 1px 1px 15px -2px rgba(136, 136, 136, 1);
-    -moz-box-shadow: 1px 1px 15px -2px rgba(136, 136, 136, 1);
-    box-shadow: 1px 1px 15px -2px rgba(136, 136, 136, 1);
     animation: spin 2s linear infinite;
 }
 
