@@ -264,7 +264,7 @@ boardComp.prototype.init = function(id) {
                     <h6 class="card-subtitle mb-2"> ${data.desc}</h6>
                          <a href="/#/" class="card-link"><i class="fas fa-arrow-left"></i> Back</a>
                      <a href="/#/board/${id}" class="card-link" data-toggle="modal" data-target="#addListModal_ID"><i class="fas fa-plus"></i> Add List</a>
-                <a href="/#/board/${id}" onclick="javascript: document.getElementById('eboardMsg').innerHTML = '';" class="card-link" id="editBoardLink_ID"><i class="fas fa-edit"></i> Edit</a>
+                <a href="/#/board/${id}" class="card-link" id="editBoas fa-edit"></i> Edit</a>
                 </div>
             </div>`;
             let ef = document.querySelector(`form[name="eboardForm"]`);
@@ -276,6 +276,7 @@ boardComp.prototype.init = function(id) {
             let csh = document.querySelector(`colsch-comp`);
             document.getElementById('editBoardLink_ID').addEventListener('click', function(e) {
                 $("#editBoardModal_ID").modal('show');
+                document.getElementById('eboardMsg').innerHTML = '';
                 csh.innerHTML = ``;
                 for (let i = 0; i < clSchms.length; i++) {
                     csh.appendChild(colBElem(i));
