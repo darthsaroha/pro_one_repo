@@ -102,7 +102,7 @@ function boardsComp() {
     this.boards = [];
 }
 
-function colElem(i, u) {
+function colElem(i) {
     let e = document.createElement('div');
     e.data = i;
     e.className = 'col-2';
@@ -115,7 +115,7 @@ function colElem(i, u) {
         this.parentNode.appendChild(loadElem());
         let bk = apComp.user.conf;
         apComp.user.conf.cs = this.data;
-        fetch("/user/update/conf?auth0=" + u.auth[0] + "&auth2=" + u.auth[2], { method: 'patch', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"conf" : "{\\"cs\\":${this.data}}"}` })
+        fetch("/user/update/conf?auth0=" + apComp.user.auth[0] + "&auth2=" + apComp.user.auth[2], { method: 'patch', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"conf" : "{\\"cs\\":${this.data}}"}` })
             .then(data => data.json())
             .then(data => {
                 this.innerHTML = '<i class="fas fa-check"></i>';
@@ -231,6 +231,7 @@ function listElem(data, li) {
 function boardComp() {
     this.board = {};
     this.listi = 0;
+    this.scl = {};
     this.liste = {};
     this.taske = {};
     this.taski = [0, 0];
@@ -253,7 +254,9 @@ boardComp.prototype.init = function(id) {
         .then(data => {
             data.tasks = JSON.parse(data.tasks);
             data.stats = JSON.parse(data.stats);
+            data.conf = JSON.parse(data.conf);
             this.board = data;
+            document.documentElement.style.setProperty('--blue', clSchms[data.conf.cs]);
             document.querySelector(`board-comp`).innerHTML = `
             <div class="card">
             <div class="card-header bg-primary text-white"><h5><i class="far fa-clipboard"></i> ${data.name}</h5></div>
@@ -261,7 +264,7 @@ boardComp.prototype.init = function(id) {
                     <h6 class="card-subtitle mb-2"> ${data.desc}</h6>
                          <a href="/#/" class="card-link"><i class="fas fa-arrow-left"></i> Back</a>
                      <a href="/#/board/${id}" class="card-link" data-toggle="modal" data-target="#addListModal_ID"><i class="fas fa-plus"></i> Add List</a>
-                <a href="/#/board/${id}" onclick="javascript: document.getElementById('eboardMsg').innerHTML = '';" class="card-link" data-toggle="modal" data-target="#editBoardModal_ID"><i class="fas fa-edit"></i> Edit</a>
+                <a href="/#/board/${id}" onclick="javascript: document.getElementById('eboardMsg').innerHTML = '';" class="card-link" id="editBoardLink_ID"><i class="fas fa-edit"></i> Edit</a>
                 </div>
             </div>`;
             let ef = document.querySelector(`form[name="eboardForm"]`);
@@ -270,9 +273,18 @@ boardComp.prototype.init = function(id) {
             for (let i = 0; i < data.tasks.length; i++) {
                 document.getElementById("taskList_ID").appendChild(listElem(data.tasks[i], i));
             }
+            let csh = document.querySelector(`colsch-comp`);
+            document.getElementById('editBoardLink_ID').addEventListener('click', function(e) {
+                $("#editBoardModal_ID").modal('show');
+                csh.innerHTML = ``;
+                for (let i = 0; i < clSchms.length; i++) {
+                    csh.appendChild(colBElem(i));
+                }
+            });
             document.getElementById('bloader').classList.add('d-none');
         })
         .catch(function(error) {
+            console.log(error);
             document.getElementById('bloader').classList.add('d-none');
             window.location.hash = "/";
             return;
@@ -321,6 +333,35 @@ boardComp.prototype.delBoard = function() {
         .catch(function(error) {
             document.getElementById("eboardMsg").innerHTML = `<div class="alert alert-warning" role="alert">Cannot Delete Board..</div>`;
         });
+}
+
+function colBElem(i) {
+    let e = document.createElement('div');
+    e.data = i;
+    e.className = 'col-2';
+    e.style = `background-color: ${clSchms[i]}; cursor: pointer; height: 40px; margin: 4px; text-align: center; padding-top: 10px; color: #fff;`;
+    if (i == bdComp.board.conf.cs) {
+        bdComp.scl = e;
+        e.innerHTML = '<i class="fas fa-check"></i>';
+    }
+    e.addEventListener('click', function(e) {
+        this.parentNode.appendChild(loadElem());
+        let bk = bdComp.board.conf;
+        bdComp.board.conf.cs = this.data;
+        fetch("/user/board/update?auth0=" + apComp.user.auth[0] + "&auth2=" + apComp.user.auth[2], { method: 'patch', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"name" : "${bdComp.board.name}" ,"desc" : "${bdComp.board.desc}", "id" : "${bdComp.board.id}","conf" : "{\\"cs\\":${this.data}}"}` })
+            .then(data => data.json())
+            .then(data => {
+                this.innerHTML = '<i class="fas fa-check"></i>';
+                bdComp.scl.innerHTML = '';
+                bdComp.scl = this;
+                document.documentElement.style.setProperty('--blue', clSchms[this.data]);
+                document.getElementById('smLoad_ID').remove();
+            })
+            .catch(function(error) {
+                document.getElementById('smLoad_ID').remove();
+            });
+    });
+    return e;
 }
 
 boardComp.prototype.addList = function(e) {

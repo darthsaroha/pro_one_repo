@@ -272,9 +272,9 @@ func main() {
 			http.Error(res, "INVPRM", 500)
 			return
 		}
-		stm, _ := db.Prepare("UPDATE pr_one_boards SET  bname = ?, bdesc = ? , bupdated_at = ? WHERE bid = ?;")
+		stm, _ := db.Prepare("UPDATE pr_one_boards SET  bname = ?, bdesc = ?,bconf = ?, bupdated_at = ? WHERE bid = ?;")
 		defer stm.Close()
-		if _, err = stm.Exec(b.Name, b.Desc, time.Now(), b.Id); err != nil {
+		if _, err = stm.Exec(b.Name, b.Desc, b.Conf, time.Now(), b.Id); err != nil {
 			http.Error(res, "NOUPD", 500)
 			return
 		}
