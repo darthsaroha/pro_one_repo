@@ -348,7 +348,7 @@ cf4.prototype.f8 = function(data, li, ti) { // task el ===>
             e2.status.checked = false;
             e2.status.value = 0;
         }
-        document.getElementById("ID14").innerHTML = `<b class="text-muted">Content</b><h5 class="card-title">${data.c}</h5>`;
+        document.getElementById("ID14").innerHTML = `<b class="text-muted">Content</b><p class="card-title">${data.c}</p>`;
         let o1 = document.getElementById('ID18');
         o1.innerHTML = '';
         let o2 = document.createElement('option');
@@ -404,7 +404,7 @@ cf4.prototype.f10 = function(e) { // edit task func ===>
         .then(data => {
             document.getElementById('ID4').remove();
             c4.o4.childNodes[0].childNodes[0].innerHTML = this.content.value;
-            document.getElementById("ID14").innerHTML = `<b class="text-muted">Content</b><h5 class="card-title">${this.content.value}</h5>`;
+            document.getElementById("ID14").innerHTML = `<b class="text-muted">Content</b><p class="card-title">${this.content.value}</p>`;
             c5.f2(`form[name="etaskForm"]`, 1, "Succesfully Updated Task");
         })
         .catch(function(error) {
