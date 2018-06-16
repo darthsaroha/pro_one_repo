@@ -34,8 +34,6 @@
                     <div class="card">
                         <div class="card-body">
                             <h4>Login</h4>
-                            <div id="loginMsg">
-                            </div>
                             <form name="loginForm">
                                 <div class="form-group">
                                     <input type="email" class="form-control" name="email" placeholder="Email Address.." required>
@@ -53,8 +51,6 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="subtitle">Join</h4>
-                            <div id="joinMsg">
-                            </div>
                             <form name="joinForm">
                                 <div class="form-group">
                                     <input type="email" class="form-control" name="email" placeholder="Email Address.." required>
@@ -74,7 +70,7 @@
                     <br>
                     <hr>
                     <center>
-                        <b class="text-muted">By Love Saroha<br> &copy; <span id="cy"></span> </b>
+                        <b class="text-muted">By Love Saroha<br> &copy; <span id="ID1"></span> </b>
                     </center>
                 </div>
             </div>
@@ -88,14 +84,14 @@
                 </div>
                 <div class="card-body">
                     <h6 class="card-subtitle mb-2">Showing all boards..</h6>
-                    <a href="/#/" class="card-link" data-toggle="modal" data-target="#addBoardModal_ID"><i class="fas fa-plus"></i> Add New</a>
+                    <a href="/#/" class="card-link" data-toggle="modal" data-target="#ID6"><i class="fas fa-plus"></i> Add New</a>
                 </div>
             </div>
             <br>
-            <div id="boardList_ID" class="card-columns"></div>
+            <div id="ID5" class="card-columns"></div>
         </div>
         <!-- Modal -->
-        <div class="modal" id="addBoardModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal" id="ID6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header  text-white bg-primary">
@@ -105,7 +101,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="aboardMsg"></div>
                         <form name="aboardForm">
                             <div class="form-group">
                                 <label class="label">Name</label>
@@ -124,8 +119,8 @@
             </div>
         </div>
         <!-- Modal -->
-        <div class="modal" id="viewUserModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+        <div class="modal" id="ID9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-white bg-primary">
                         <h5 class="modal-title" id="exampleModalLabel">View User</h5>
@@ -163,10 +158,10 @@
         <div class="container">
             <board-comp></board-comp>
             <br>
-            <div id="taskList_ID" class="card-columns"></div>
+            <div id="ID17" class="card-columns"></div>
         </div>
         <!-- Modal -->
-        <div class="modal" id="addListModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal" id="ID16" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header  text-white bg-primary">
@@ -176,7 +171,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="alistMsg"></div>
                         <form name="alistForm">
                             <div class="form-group">
                                 <label class="label">Name</label>
@@ -195,7 +189,7 @@
             </div>
         </div>
         <!-- Modal ••••••••••-->
-        <div class="modal" id="addTaskModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal" id="ID15" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header  text-white bg-primary">
@@ -205,7 +199,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="ataskMsg"></div>
                         <form name="ataskForm">
                             <div class="form-group">
                                 <label class="label">Content</label>
@@ -220,7 +213,7 @@
             </div>
         </div>
         <!-- Modal ••••••••••-->
-        <div class="modal" id="editBoardModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal" id="ID11" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header  text-white bg-primary">
@@ -230,7 +223,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="eboardMsg"></div>
                         <form name="eboardForm">
                             <div class="form-group">
                                 <label class="label">Name</label>
@@ -249,13 +241,13 @@
                             <colsch-comp class="row" style="border: 1px solid #eee;"></colsch-comp>
                         </div>
                         <br>
-                        <a style="cursor: pointer; color: var(--blue);" onclick="javascript: bdComp.delBoard();"><i class="fa fa-trash"></i> Delete</a>
+                        <a style="cursor: pointer; color: var(--blue);" onclick="javascript: c4.f4();"><i class="fa fa-trash"></i> Delete</a>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Modal ••••••••••-->
-        <div class="modal" id="viewListModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal" id="ID12" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header  text-white bg-primary">
@@ -265,7 +257,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div id="elistMsg"></div>
                         <form name="elistForm">
                             <div class="form-group">
                                 <label class="label">Name</label>
@@ -279,14 +270,14 @@
                                 <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
                             </div>
                         </form>
-                        <a style="cursor: pointer; color: var(--blue);" onclick="javascript: bdComp.delList(this);"><i class="fa fa-trash"></i> Delete</a>
+                        <a style="cursor: pointer; color: var(--blue);" onclick="javascript: c4.f7(this);"><i class="fa fa-trash"></i> Delete</a>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Modal ••••••••••-->
-        <div class="modal" id="viewTaskModal_ID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+        <div class="modal" id="ID13" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header  text-white bg-primary">
                         <h5 class="modal-title" id="exampleModalLabel">View Task</h5>
@@ -307,14 +298,19 @@
                         <br>
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="otask" role="tabpanel" aria-labelledby="home-tab">
-                                <div id="taskCont_ID"></div>
+                                <div id="ID14"></div>
                             </div>
                             <div class="tab-pane fade" id="etask" role="tabpanel" aria-labelledby="profile-tab">
-                                <div id="etaskMsg"></div>
                                 <form name="etaskForm">
                                     <div class="form-group">
                                         <label class="label">Content</label>
                                         <input type="text" class="form-control" name="content" minlength="5" placeholder="Content.." required>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-toggle my-2">
+                                            <input type="checkbox" id="customToggle2" name="status" class="custom-control-input" value="0">
+                                            <label class="custom-control-label" for="customToggle2">Is Done?</label>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
@@ -322,10 +318,10 @@
                                 </form>
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Move To</label>
-                                    <select class="custom-select" style="outline: 0;" id="listSel_ID">
+                                    <select class="custom-select" style="outline: 0;" id="ID18">
                                     </select>
                                 </div>
-                                <a style="cursor: pointer; color: var(--blue);" onclick="javascript: bdComp.delTask(this);"><i class="fa fa-trash"></i> Delete</a>
+                                <a style="cursor: pointer; color: var(--blue);" onclick="javascript: c4.f12(this);"><i class="fa fa-trash"></i> Delete</a>
                             </div>
                         </div>
                     </div>

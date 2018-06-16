@@ -516,12 +516,12 @@ select.form-control-lg:not([size]):not([multiple]),
 
 .was-validated .custom-toggle .custom-control-input:valid~.custom-control-label::before,
 .custom-toggle .custom-control-input.is-valid~.custom-control-label::before {
-    background-color: #17c671;
+    background-color: var(--blue);
 }
 
 .was-validated .custom-toggle .custom-control-input:invalid~.custom-control-label::after,
 .custom-toggle .custom-control-input.is-invalid~.custom-control-label::after {
-    background-color: #eb8c95;
+    background-color: var(--blue);
 }
 
 .was-validated .custom-toggle .custom-control-input:invalid:focus~.custom-control-label::before,
@@ -2116,14 +2116,14 @@ i.material-icons {
     left: 0.25rem;
     width: 1.25rem;
     height: 1.25rem;
-    background: #becad6;
+    background: var(--blue);
     border-radius: 6.25rem;
     transition: 350ms;
 }
 
 .custom-toggle .custom-control-input:checked~.custom-control-label::before {
-    background: #17c671;
-    border-color: #17c671;
+    background: var(--blue);
+    border-color: var(--blue);
 }
 
 .custom-toggle .custom-control-input:checked~.custom-control-label::after {
@@ -3225,7 +3225,7 @@ a.badge {
     height: 0.625rem;
     line-height: 0.625rem;
     color: #fff;
-    background-color: #007bff;
+    background-color: var(--blue);
     transition: width 0.6s ease;
 }
 

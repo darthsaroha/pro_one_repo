@@ -54,6 +54,12 @@
     border-radius: 50%;
     width: 100px;
     height: 100px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
     animation: spin 2s linear infinite;
 }
 
@@ -74,6 +80,12 @@
     border-radius: 50%;
     width: 60px;
     height: 60px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
     animation: spin 2s linear infinite;
 }
 
@@ -106,6 +118,11 @@ body {
     font-family: "Ubuntu", sans-serif;
     font-weight: 400;
     padding-top: 10px;
+}
+
+.container {
+    padding-right: 5%;
+    padding-left: 5%;
 }
 
 .text-white {
@@ -141,4 +158,8 @@ a {
     color: inherit;
     font-weight: bold;
     box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+}
+
+.color {
+    color: var(--blue);
 }

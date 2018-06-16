@@ -92,7 +92,7 @@ func main() {
 			return
 		}
 		if err := db.QueryRow("SELECT uid , uname ,uconf, uemail , ucreated_at FROM pr_one_users WHERE uemail = ? AND upassword_digest = ?;", u.Email, encode(u.Password_digest)).Scan(&u.Auth[0], &u.Name, &u.Conf, &u.Email, &u.Created_at); err != nil {
-			http.Error(res, "NOREC", 500)
+			http.Error(res, "NOREQ", 500)
 			return
 		}
 		u.genKeys()
@@ -191,7 +191,7 @@ func main() {
 		defer stm.Close()
 		b.Conf = "{\"cs\": 0}"
 		b.Stats = "[2,0,2,0,0]"
-		b.Tasks = "[{\"i\": 1,\"n\" : \"Todo\",\"d\" : \"Todo List Description\",\"ts\" : []},{\"i\": 2,\"n\" : \"Complete\",\"d\" : \"Complete List Description\",\"ts\" : []}]"
+		b.Tasks = "[{\"i\": 1,\"n\" : \"Todo\",\"d\" : \"List Of Tasks To Be Done\",\"ts\" : []},{\"i\": 2,\"n\" : \"Done\",\"d\" : \"List Of Completed Tasks\",\"ts\" : []}]"
 		if _, err := stm.Exec(b.Id, b.Name, b.Conf, b.Desc, b.Tasks, b.Stats, time.Now(), time.Now()); err != nil {
 			http.Error(res, "NOINS", 500)
 			return

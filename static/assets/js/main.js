@@ -1,45 +1,44 @@
 "use-strict";
 
-let vwComp = new viewComp();
-let wlComp = new welComp();
-let bdsComp = new boardsComp();
-let bdComp = new boardComp();
-let apComp = new appComp();
-let clSchms = ["#007bff", "#E84A5F", "#CC527A", "#2F9599"];
+let c1 = new cf1(); //v
+let c2 = new cf2(); //wl
+let c3 = new cf3(); //bds
+let c4 = new cf4(); //bd
+let c5 = new cf5(); //app
 
-function initApp(e) {
+function f1(e) {
     e.preventDefault();
-    let url = window.location.hash.split("/");
-    if (url[1] != "welcome") {
-        if (localStorage.getItem("pro-one-user-data") == null) {
+    let v1 = window.location.hash.split("/");
+    if (v1[1] != "welcome") {
+        if (localStorage.getItem("ld1") == null) {
             window.location.hash = "/welcome";
             return;
         }
-        if (apComp.user.email == null) {
-            apComp.user = JSON.parse(localStorage.getItem("pro-one-user-data"));
+        if (c5.o1.email == null) {
+            c5.o1 = JSON.parse(localStorage.getItem("ld1"));
         }
     }
-    switch (url[1]) {
+    switch (v1[1]) {
         case "welcome":
-            vwComp.init("welcome");
-            wlComp.init();
+            c1.f1("welcome");
+            c2.f1();
             localStorage.clear();
             break;
         case "":
-            vwComp.init("home");
-            bdsComp.init();
+            c1.f1("home");
+            c3.f1();
             break;
         case "board":
-            vwComp.init("board");
-            bdComp.init(url[2]);
+            c1.f1("board");
+            c4.f1(v1[2]);
             break;
         default:
             window.location.hash = "/";
     }
 }
 
-window.addEventListener("load", initApp);
-window.addEventListener("popstate", initApp);
+window.addEventListener("load", f1);
+window.addEventListener("popstate", f1);
 
 /*
  * JavaScript MD5

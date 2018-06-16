@@ -4736,7 +4736,6 @@ tbody.collapse.show {
 .alert-success {
     color: #155724;
     background-color: #d4edda;
-    border-color: #c3e6cb;
 }
 
 .alert-success hr {
@@ -4764,7 +4763,6 @@ tbody.collapse.show {
 .alert-warning {
     color: #856404;
     background-color: #fff3cd;
-    border-color: #ffeeba;
 }
 
 .alert-warning hr {
