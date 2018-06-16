@@ -86,8 +86,8 @@ html {
 
 
 body {
-    font-family: "PremierSans-Bold", Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-weight: 300;
+    font-family: "PremierSans-Regular", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-weight: bold;
     padding-top: 10px;
 }
 
@@ -123,7 +123,6 @@ a {
 .alert-success {
     background-color: #fff;
     color: inherit;
-    font-weight: bold;
     box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
 }
 
