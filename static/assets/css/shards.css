@@ -269,11 +269,11 @@ pre {
     color: #495057;
     background-color: #fff;
     border-color: var(--blue);
-    box-shadow: 0 0.313rem 0.719rem var(--blue), 0 0.156rem 0.125rem var(--blue);
+    box-shadow: 0 0.113rem 0.219rem var(--blue), 0 0.156rem 0.125rem var(--blue);
 }
 
 .form-control:focus:hover {
-    border-color: #007bff;
+    border-color: var(--blue);
 }
 
 .form-control::-webkit-input-placeholder {
