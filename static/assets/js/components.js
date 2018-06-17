@@ -145,7 +145,7 @@ cf3.prototype.f2 = function(o1) { // board el ===>
     e1.innerHTML = `<div class="card-body"><h4 class="card-title" style="cursor: pointer;" onclick='javascript: window.location.hash = "/board/${o1.id}";''>${o1.name}</h4><h6 class="card-subtitle mb-2 text-muted">${o1.desc}</h6><hr><center>
     <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
     <div class="d-none"><br><h3><font class="text-muted">${o1.stats[4]}</font><font style="color: var(--blue);">/</font>${o1.stats[3]}</h3>
-    <div class="progress"><div class="progress-bar" role="progressbar" style="width: ${(o1.stats[4]/o1.stats[3])*100}%" aria-valuenow="${(o1.stats[4]/o1.stats[3])*100}" aria-valuemin="0" aria-valuemax="100"></div></div><b class="text-muted"> Task Done</b></div></center></div>
+    <div class="progress"><div class="progress-bar" role="progressbar" style="width: ${(o1.stats[4]/o1.stats[3])*100}%" aria-valuenow="${(o1.stats[4]/o1.stats[3])*100}" aria-valuemin="0" aria-valuemax="100"></div></div><b class="text-muted"> Progress</b></div></center></div>
     `;
     return e1;
 }
