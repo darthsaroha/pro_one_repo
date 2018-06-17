@@ -20,7 +20,8 @@ cf5.prototype.f1 = function(cl) { // load el ===>
 }
 cf5.prototype.f2 = function(c, ic, m) { // alert el ===>
     let e2 = document.querySelector(c);
-    if (e2.firstChild.className == 'alert alert-success') {
+    if (e2.firstChild.className == 'alert alert-success' || ic == -1) {
+        if (ic == -1) { e2.remove(); }
         return;
     }
     let icn = ["fa-exclamation", "fa-check"];
@@ -177,6 +178,7 @@ function cf4() { // comp c4 ===>
 }
 //cf---------------------------------------------------->
 cf4.prototype.f1 = function(id) { // init func ===>
+    console.log(document.querySelector(`form[name="eboardForm"]`));
     document.querySelector(`form[name="alistForm"]`).addEventListener('submit', this.f5);
     document.querySelector(`form[name="elistForm"]`).addEventListener('submit', this.f6);
     document.querySelector(`form[name="etaskForm"]`).addEventListener('submit', this.f10);
@@ -199,6 +201,7 @@ cf4.prototype.f1 = function(id) { // init func ===>
             }
             document.getElementById('ID10').addEventListener('click', function(e) {
                 $("#ID11").modal('show');
+                c5.f2(`form[name="eboardForm"]`, -1, "");
                 let e2 = document.querySelector(`colsch-comp`);
                 if (e2.childNodes.length > 1) { return; }
                 for (let i = 0; i < c5.a1.length; i++) {
@@ -244,6 +247,7 @@ cf4.prototype.f2 = function(o1, v1) { // list el ===>
         let f = document.querySelector(`form[name="elistForm"]`);
         f.name.value = c4.o1.tasks[v1].n;
         f.desc.value = c4.o1.tasks[v1].d;
+        c5.f2(`form[name="elistForm"]`, -1, "");
     });
     return e1;
 }
@@ -340,6 +344,7 @@ cf4.prototype.f8 = function(data, li, ti) { // task el ===>
         c4.o4 = e1;
         c4.a1 = [li, ti];
         let e2 = document.querySelector(`form[name="etaskForm"]`);
+        c5.f2(`form[name="etaskForm"]`, -1, "");
         e2.content.value = data.c;
         if (data.s == 1) {
             e2.status.checked = true;
