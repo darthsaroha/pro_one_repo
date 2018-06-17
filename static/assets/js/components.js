@@ -21,7 +21,7 @@ cf5.prototype.f1 = function(cl) { // load el ===>
 cf5.prototype.f2 = function(c, ic, m) { // alert el ===>
     let e2 = document.querySelector(c);
     if (e2.firstChild.className == 'alert alert-success' || ic == -1) {
-        if (ic == -1) { e2.remove(); }
+        if (ic == -1 && e2.firstChild.className == 'alert alert-success') { e2.firstChild.remove(); }
         return;
     }
     let icn = ["fa-exclamation", "fa-check"];
