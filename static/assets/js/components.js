@@ -178,7 +178,6 @@ function cf4() { // comp c4 ===>
 }
 //cf---------------------------------------------------->
 cf4.prototype.f1 = function(id) { // init func ===>
-    console.log(document.querySelector(`form[name="eboardForm"]`));
     document.querySelector(`form[name="alistForm"]`).addEventListener('submit', this.f5);
     document.querySelector(`form[name="elistForm"]`).addEventListener('submit', this.f6);
     document.querySelector(`form[name="etaskForm"]`).addEventListener('submit', this.f10);
