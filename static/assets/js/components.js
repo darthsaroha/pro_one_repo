@@ -24,10 +24,15 @@ cf5.prototype.f2 = function(c, ic, m) { // alert el ===>
         if (ic == -1 && e2.firstChild.className == 'alert alert-success') { e2.firstChild.remove(); }
         return;
     }
-    let icn = ["fa-exclamation", "fa-check"];
     let e1 = document.createElement('div');
     e1.className = 'alert alert-success';
-    e1.innerHTML = `<i class="fas ${icn[ic]} color"></i> ${m}..<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="outline: 0;"><span aria-hidden="true">&times;</span></button>`;
+    if (ic == -2) {
+        e1.innerHTML = `<center><i class="fas fa-exclamation-circle fa-2x color"></i><br> ${m} Or <a style="cursor: pointer; color: var(--blue);"  data-dismiss="alert" aria-label="Close">No</a></center>`;
+        e2.prepend(e1);
+        return;
+    }
+    let icn = ["fa-exclamation", "fa-check"];
+    e1.innerHTML = `<i class="fas ${icn[ic]} color"></i> ${m}<button type="button" class="close" data-dismiss="alert" aria-label="Close" style="outline: 0;"><span aria-hidden="true">&times;</span></button>`;
     e2.prepend(e1);
 }
 cf5.prototype.f3 = function(v1, v2, v3) { // col el ===>
@@ -277,7 +282,7 @@ cf4.prototype.f5 = function(e) { // add list func ===>
     e.preventDefault();
     c4.o1.stats[0]++;
     c4.o1.stats[2]++;
-    let o1 = { "i": c4.o1.stats[0], "n": this.name.value, "d": this.desc.value, "ts": [] ,s: 0};
+    let o1 = { "i": c4.o1.stats[0], "n": this.name.value, "d": this.desc.value, "ts": [], s: 0 };
     c4.o1.tasks.push(o1);
     this.parentNode.appendChild(c5.f1("loader-sm"));
     fetch("/user/board/update/task?auth0=" + c5.o1.auth[0] + "&auth2=" + c5.o1.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(c4.o1.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(c4.o1.tasks))} , "id" : "${c4.o1.id}"}` }).then(data => data.json())
@@ -296,7 +301,7 @@ cf4.prototype.f5 = function(e) { // add list func ===>
 }
 cf4.prototype.f6 = function(e) { // edit list func ===>
     e.preventDefault();
-    let bk = { n: c4.o1.tasks[c4.v1].n, d: c4.o1.tasks[c4.v1].d,s: c4.o1.tasks[c4.v1].s };
+    let bk = { n: c4.o1.tasks[c4.v1].n, d: c4.o1.tasks[c4.v1].d, s: c4.o1.tasks[c4.v1].s };
     c4.o1.tasks[c4.v1].n = this.name.value;
     c4.o1.tasks[c4.v1].d = this.desc.value;
     this.parentNode.appendChild(c5.f1("loader-sm"));
@@ -423,8 +428,8 @@ cf4.prototype.f11 = function(e) { // move task func ===>
     }
     c4.o1.tasks[c4.a1[0]].ts.splice(c4.a1[1], 1);
     t.s = c4.o1.tasks[this.value].s;
-    if(c4.o1.tasks[c4.a1[0]].s != c4.o1.tasks[this.value].s) {
-        c4.o1.stats[4] +=  c4.o1.tasks[this.value].s ? 1 : -1;
+    if (c4.o1.tasks[c4.a1[0]].s != c4.o1.tasks[this.value].s) {
+        c4.o1.stats[4] += c4.o1.tasks[this.value].s ? 1 : -1;
     }
     c4.o1.tasks[this.value].ts.push(t);
     this.parentNode.appendChild(c5.f1("loader-sm"));
