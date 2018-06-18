@@ -171,6 +171,9 @@ func main() {
 		}
 		res.Header().Set("Content-Type", "application/json")
 		bds = bds[0:(len(bds)-1)] + "]"
+		if len(bds) < 4 {
+			bds = "[]"
+		}
 		res.Write([]byte(bds))
 	})
 	////////////////////////////////////////////
