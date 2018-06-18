@@ -9,6 +9,10 @@ let c5 = new cf5(); //app
 function f1(e) {
     e.preventDefault();
     let v1 = window.location.hash.split("/");
+    document.querySelector(`body`).className = "";
+    if(document.querySelector(`div[class="modal-backdrop show"]`)) {
+        document.querySelector(`div[class="modal-backdrop show"]`).remove();
+    }
     if (v1[1] != "welcome") {
         if (localStorage.getItem("ld1") == null) {
             window.location.hash = "/welcome";

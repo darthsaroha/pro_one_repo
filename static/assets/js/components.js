@@ -193,7 +193,8 @@ cf4.prototype.f1 = function(id) { // init func ===>
         .then(data => {
             this.o1 = data;
             document.documentElement.style.setProperty('--blue', c5.a1[data.conf.cs]);
-            document.querySelector(`board-comp`).innerHTML = `<div class="card"><div class="card-header bg-primary text-white"><h5><i class="far fa-clipboard"></i> ${data.name}</h5></div><div class="card-body"><h6 class="card-subtitle mb-2"> ${data.desc}</h6><a href="/#/" class="card-link"><i class="fas fa-arrow-left"></i> Back</a><a style="cursor: pointer; color: var(--blue);" class="card-link" data-toggle="modal" data-target="#ID16"><i class="fas fa-plus"></i> Add List</a><a style="cursor: pointer; color: var(--blue);" class="card-link" id="ID10"> <i class="fas fa-edit"></i> Edit</a></div></div>`;
+            let v1 = new Date(data.created_at);
+            document.querySelector(`board-comp`).innerHTML = `<div class="card"><div class="card-header bg-primary text-white"><h5><i class="far fa-clipboard"></i> ${data.name}</h5></div><div class="card-body"><h6 class="card-subtitle text-muted"> ${data.desc}</h6><i class="far fa-calendar-alt color"></i> ${v1.getDate()}/${v1.getMonth() + 1}/${v1.getFullYear()}<hr style="margin-left: -20px; margin-right: -20px;"><a href="/#/" class="card-link"><i class="fas fa-arrow-left"></i> Back</a><a style="cursor: pointer; color: var(--blue);" class="card-link" data-toggle="modal" data-target="#ID16"><i class="fas fa-plus"></i> Add List</a><a style="cursor: pointer; color: var(--blue);" class="card-link" id="ID10"> <i class="fas fa-edit"></i> Edit</a></div></div>`;
             let e1 = document.querySelector(`form[name="eboardForm"]`);
             e1.name.value = data.name;
             e1.desc.value = data.desc;
