@@ -139,10 +139,10 @@ cf3.prototype.f1 = function() { // init func ===>
         .catch(function(error) { console.error(error); });
 }
 cf3.prototype.f2 = function(o1) { // board el ===>
-    o1.stats = JSON.parse(o1.stats);
     let e1 = document.createElement('div');
     e1.className = "card";
-    e1.innerHTML = `<div class="card-body"><h4 class="card-title" style="cursor: pointer;" onclick='javascript: window.location.hash = "/board/${o1.id}";''>${o1.name}</h4><h6 class="card-subtitle mb-2 text-muted">${o1.desc}</h6><hr><center>
+    let v1 = new Date(o1.created_at);
+    e1.innerHTML = `<div class="card-body"><h4 class="card-title" style="cursor: pointer;" onclick='javascript: window.location.hash = "/board/${o1.id}";''>${o1.name}</h4><h6 class="card-subtitle mb-2 text-muted">${o1.desc}</h6><i class="far fa-calendar-alt color"></i> ${v1.getDate()}/${v1.getMonth() + 1}/${v1.getFullYear()}<hr><center>
     <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
     <div class="d-none"><br><h3><font class="text-muted">${o1.stats[4]}</font><font style="color: var(--blue);">/</font>${o1.stats[3]}</h3>
     <div class="progress"><div class="progress-bar" role="progressbar" style="width: ${(o1.stats[4]/o1.stats[3])*100}%" aria-valuenow="${(o1.stats[4]/o1.stats[3])*100}" aria-valuemin="0" aria-valuemax="100"></div></div><b class="text-muted"> Progress</b></div></center></div>
@@ -186,9 +186,6 @@ cf4.prototype.f1 = function(id) { // init func ===>
     document.querySelector(`body`).appendChild(c5.f1("loader"));
     fetch("/user/board?auth0=" + c5.o1.auth[0] + "&auth2=" + c5.o1.auth[2] + "&bdi=" + id, { method: 'get', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" } }).then(data => data.json())
         .then(data => {
-            data.tasks = JSON.parse(data.tasks);
-            data.stats = JSON.parse(data.stats);
-            data.conf = JSON.parse(data.conf);
             this.o1 = data;
             document.documentElement.style.setProperty('--blue', c5.a1[data.conf.cs]);
             document.querySelector(`board-comp`).innerHTML = `<div class="card"><div class="card-header bg-primary text-white"><h5><i class="far fa-clipboard"></i> ${data.name}</h5></div><div class="card-body"><h6 class="card-subtitle mb-2"> ${data.desc}</h6><a href="/#/" class="card-link"><i class="fas fa-arrow-left"></i> Back</a><a style="cursor: pointer; color: var(--blue);" class="card-link" data-toggle="modal" data-target="#ID16"><i class="fas fa-plus"></i> Add List</a><a style="cursor: pointer; color: var(--blue);" class="card-link" id="ID10"> <i class="fas fa-edit"></i> Edit</a></div></div>`;
@@ -280,7 +277,7 @@ cf4.prototype.f5 = function(e) { // add list func ===>
     e.preventDefault();
     c4.o1.stats[0]++;
     c4.o1.stats[2]++;
-    let o1 = { "i": c4.o1.stats[0], "n": this.name.value, "d": this.desc.value, "ts": [] };
+    let o1 = { "i": c4.o1.stats[0], "n": this.name.value, "d": this.desc.value, "ts": [] ,s: 0};
     c4.o1.tasks.push(o1);
     this.parentNode.appendChild(c5.f1("loader-sm"));
     fetch("/user/board/update/task?auth0=" + c5.o1.auth[0] + "&auth2=" + c5.o1.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(c4.o1.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(c4.o1.tasks))} , "id" : "${c4.o1.id}"}` }).then(data => data.json())
@@ -299,7 +296,7 @@ cf4.prototype.f5 = function(e) { // add list func ===>
 }
 cf4.prototype.f6 = function(e) { // edit list func ===>
     e.preventDefault();
-    let bk = { n: c4.o1.tasks[c4.v1].n, d: c4.o1.tasks[c4.v1].d };
+    let bk = { n: c4.o1.tasks[c4.v1].n, d: c4.o1.tasks[c4.v1].d,s: c4.o1.tasks[c4.v1].s };
     c4.o1.tasks[c4.v1].n = this.name.value;
     c4.o1.tasks[c4.v1].d = this.desc.value;
     this.parentNode.appendChild(c5.f1("loader-sm"));
@@ -377,7 +374,8 @@ cf4.prototype.f9 = function(e) { // add task func ===>
     e.preventDefault();
     c4.o1.stats[1]++;
     c4.o1.stats[3]++;
-    let o1 = { "c": this.content.value, "s": 0 };
+    let o1 = { "c": this.content.value, "s": c4.o1.tasks[c4.v1].s };
+    c4.o1.stats[4] += o1.s ? 1 : 0;
     c4.o1.tasks[c4.v1].ts.push(o1);
     this.parentNode.appendChild(c5.f1("loader-sm"));
     fetch("/user/board/update/task?auth0=" + c5.o1.auth[0] + "&auth2=" + c5.o1.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(c4.o1.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(c4.o1.tasks))} , "id" : "${c4.o1.id}"}` }).then(data => data.json())
@@ -424,6 +422,10 @@ cf4.prototype.f11 = function(e) { // move task func ===>
         return;
     }
     c4.o1.tasks[c4.a1[0]].ts.splice(c4.a1[1], 1);
+    t.s = c4.o1.tasks[this.value].s;
+    if(c4.o1.tasks[c4.a1[0]].s != c4.o1.tasks[this.value].s) {
+        c4.o1.stats[4] +=  c4.o1.tasks[this.value].s ? 1 : -1;
+    }
     c4.o1.tasks[this.value].ts.push(t);
     this.parentNode.appendChild(c5.f1("loader-sm"));
     fetch("/user/board/update/task?auth0=" + c5.o1.auth[0] + "&auth2=" + c5.o1.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(c4.o1.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(c4.o1.tasks))} , "id" : "${c4.o1.id}"}` })

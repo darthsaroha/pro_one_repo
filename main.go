@@ -149,7 +149,8 @@ func main() {
 			http.Error(res, "NOACS", 500)
 			return
 		}
-		bds := make([]board, 0)
+		//bds := make([]board, 0)
+		var bds string = "["
 		var b board
 		var bdi string
 		rows, err := db.Query("SELECT bid FROM pr_one_usr_bds WHERE uid = " + u.Auth[0] + ";")
@@ -166,11 +167,11 @@ func main() {
 			}
 			b.Id, _ = encrypt([]byte(b.Id), []byte(req.FormValue("auth2")[:32]))
 			b.Tasks = "[]"
-			bds = append(bds, b)
+			bds += "{\"name\": \"" + b.Name + "\",\"desc\": \"" + b.Desc + "\",\"id\": \"" + b.Id + "\",\"conf\": {},\"tasks\": [],\"created_at\": \"" + b.Created_at + "\",\"stats\":" + b.Stats + "},"
 		}
 		res.Header().Set("Content-Type", "application/json")
-		js, _ := json.Marshal(bds)
-		res.Write(js)
+		bds = bds[0:(len(bds)-1)] + "]"
+		res.Write([]byte(bds))
 	})
 	////////////////////////////////////////////
 	mux.HandleFunc("/user/board/create", func(res http.ResponseWriter, req *http.Request) {
@@ -191,7 +192,7 @@ func main() {
 		defer stm.Close()
 		b.Conf = "{\"cs\": 0}"
 		b.Stats = "[2,0,2,0,0]"
-		b.Tasks = "[{\"i\": 1,\"n\" : \"Todo\",\"d\" : \"List Of Tasks To Be Done\",\"ts\" : []},{\"i\": 2,\"n\" : \"Done\",\"d\" : \"List Of Completed Tasks\",\"ts\" : []}]"
+		b.Tasks = "[{\"i\": 1,\"n\" : \"Todo\",\"d\" : \"List Of Tasks To Be Done\",\"ts\" : [],\"s\" :0},{\"i\": 2,\"n\" : \"Done\",\"d\" : \"List Of Completed Tasks\",\"ts\" : [],\"s\":1}]"
 		if _, err := stm.Exec(b.Id, b.Name, b.Conf, b.Desc, b.Tasks, b.Stats, time.Now(), time.Now()); err != nil {
 			http.Error(res, "NOINS", 500)
 			return
@@ -203,8 +204,7 @@ func main() {
 		}(u.Auth[0], b.Id)
 		b.Id, _ = encrypt([]byte(b.Id), []byte(req.FormValue("auth2")[:32]))
 		res.Header().Set("Content-Type", "application/json")
-		js, _ := json.Marshal(b)
-		res.Write(js)
+		res.Write([]byte("{\"name\": \"" + b.Name + "\",\"desc\": \"" + b.Desc + "\",\"id\": \"" + b.Id + "\",\"conf\": " + b.Conf + ",\"tasks\": " + b.Tasks + ",\"created_at\": \"" + b.Created_at[0:19] + "\",\"stats\":" + b.Stats + "}"))
 	})
 	///////////////////////////////////////////
 	mux.HandleFunc("/user/board", func(res http.ResponseWriter, req *http.Request) {
@@ -222,8 +222,7 @@ func main() {
 			return
 		}
 		res.Header().Set("Content-Type", "application/json")
-		js, _ := json.Marshal(b)
-		res.Write(js)
+		res.Write([]byte("{\"name\": \"" + b.Name + "\",\"desc\": \"" + b.Desc + "\",\"id\": \"" + b.Id + "\",\"conf\": " + b.Conf + ",\"tasks\": " + b.Tasks + ",\"created_at\": \"" + b.Created_at + "\",\"stats\":" + b.Stats + "}"))
 	})
 	//////////////////////////////////////////
 	mux.HandleFunc("/user/board/update/task", func(res http.ResponseWriter, req *http.Request) {
