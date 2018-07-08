@@ -6,327 +6,302 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/shards.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/fontawesome-all.min.css"> -->
     <link rel="stylesheet" type="text/css" href="/assets/css/bundle.css">
+    <style type="text/css">
+    .nav-pills .nav-link.active:hover,
+    .nav-pills .show>.nav-link {
+        color: #fff;
+    }
+    </style>
 </head>
 
 <body>
-    <template id="welcome_ID">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 offset-md-4">
-                    <center>
-                        <i class="far fa-clipboard fa-2x text-primary"></i>
-                        <h2>Boards</h2>
-                        <font class="text-muted">A Task Management App</font>
-                    </center>
-                    <hr>
-                    <div class="card">
-                        <div class="card-body">
-                            <h4>Login</h4>
-                            <form name="loginForm">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" name="email" placeholder="Email Address.." required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" name="digest" minlength="5" placeholder="Password" required>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary" name="submit"><i class="fas fa-sign-in-alt"></i> <b> Login</b></button>
-                                </div>
-                            </form>
-                        </div>
+    <div class="container d-none" id="welcomePageID">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <center>
+                    <i class="far fa-clipboard fa-2x text-primary"></i>
+                    <h2>Boards</h2>
+                    <font class="text-muted">A Task Management App</font>
+                </center>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Login</h4>
+                        <form name="loginForm">
+                            <div class="form-group">
+                                <input type="email" class="form-control" name="email" placeholder="Email Address.." required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="digest" minlength="5" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="submit"><i class="fas fa-sign-in-alt"></i> <b> Login</b></button>
+                            </div>
+                        </form>
                     </div>
-                    <hr>
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="subtitle">Join</h4>
-                            <form name="joinForm">
-                                <div class="form-group">
-                                    <input type="email" class="form-control" name="email" placeholder="Email Address.." required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
-                                </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" name="digest" minlength="5" placeholder="Password" required>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary" name="submit"><i class="fas fa-sign-out-alt"></i> <b> Join</b></button>
-                                </div>
-                            </form>
-                        </div>
+                </div>
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="subtitle">Join</h4>
+                        <form name="joinForm">
+                            <div class="form-group">
+                                <input type="email" class="form-control" name="email" placeholder="Email Address.." required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="digest" minlength="5" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" name="submit"><i class="fas fa-sign-out-alt"></i> <b> Join</b></button>
+                            </div>
+                        </form>
                     </div>
+                </div>
+                <br>
+                <hr>
+                <center>
+                    <b class="text-muted">By Love Saroha<br> &copy; <script type="text/javascript">document.write(new Date().getFullYear());</script></b>
+                </center>
+            </div>
+        </div>
+    </div>
+    <div class="container d-none" id="dashboardPageID" style="margin-top: -20px;">
+        <div class="card">
+            <div class="card-body" style="background-image: url('/assets/images/back.jpg'); -webkit-box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);
+-moz-box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);
+box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);">
+                <div class="media">
+                    <img class="mr-3 img-thumbnail" src="..." alt="Generic placeholder image">
+                    <div class="media-body">
+                    </div>
+                </div>
+                <hr style="margin-left: -20px; margin-right: -20px;">
+                <a style="cursor: pointer; color: var(--blue);" class="card-link" onclick="javascript: coreModule.showModalFunc('addBoardModalID');appModule.colorPaletteFunc(boardModule.addBoardForm, 0);"><i class="fas fa-plus"></i> Add New</a>
+            </div>
+        </div>
+        <br>
+        <div id="boardListID" class="card-columns"></div>
+    </div>
+    <div class="modal" id="addBoardModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-plus color"></i> Add New Board</h5>
+                    <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('addBoardModalID')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form name="addBoardForm">
+                        <div class="form-group">
+                            <label class="label">Name</label>
+                            <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Description</label>
+                            <input type="text" class="form-control" name="desc" minlength="5" placeholder="Description.." required>
+                        </div>
+                        <input type="hidden" class="form-control" name="cs" value="0">
+                        <div class="form-group" style="padding: 6px; text-align: center;  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);">
+                            <i class="fas fa-palette fa-2x mb-2" style="color: var(--blue);"></i>
+                            <br>
+                            <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
+                            <div class="row d-none" style="margin-left: 1px; margin-right: 1px; border: 1px solid #efefef; padding: 6px;
+">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container d-none" id="boardPageID" style="margin-top: -20px;">
+        <div id="boardDetailID" class="card">
+        </div>
+        <br>
+        <div id="taskListID" class="card-columns"></div>
+    </div>
+    <div class="modal" id="editBoardModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit color"></i> Edit Board</h5>
+                    <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('editBoardModalID')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form name="editBoardForm">
+                        <div class="form-group">
+                            <label class="label">Name</label>
+                            <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Description</label>
+                            <input type="text" class="form-control" name="desc" minlength="5" placeholder="Description.." required>
+                        </div>
+                        <input type="hidden" class="form-control" name="cs">
+                        <div class="form-group" style="padding: 6px; text-align: center;  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);">
+                            <i class="fas fa-palette fa-2x mb-2" style="color: var(--blue);"></i>
+                            <br>
+                            <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
+                            <div class="row d-none" style="margin-left: 1px; margin-right: 1px; border: 1px solid #efefef; padding: 6px;
+">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
+                        </div>
+                    </form>
+                    <a style="cursor: pointer; margin-top: 4px; color: var(--blue);" onclick='javascript:  appModule.createAlertBoxFunc(boardModule.editBoardForm, "You Want To Delete This Board?<br><a style=\"cursor: pointer; color: var(--blue);\" onclick=\"javascript: boardModule.deleteBoardFunc();\">Yes </a>",0,"exclamation");'><i class="fa fa-trash"></i> Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal" id="addListModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-plus color"></i> Add New List</h5>
+                    <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('addListModalID')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form name="addListForm">
+                        <div class="form-group">
+                            <label class="label">Name</label>
+                            <input type="text" class="form-control" name="name" minlength="2" placeholder="Name.." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Description</label>
+                            <input type="text" class="form-control" name="desc" minlength="3" placeholder="Description.." required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal ••••••••••-->
+    <div class="modal" id="editListModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-bars color"></i> View List</h5>
+                    <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('editListModalID');">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form name="editListForm">
+                        <div class="form-group">
+                            <label class="label">Name</label>
+                            <input type="text" class="form-control" name="name" minlength="2" placeholder="Name.." required>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Description</label>
+                            <input type="text" class="form-control" name="desc" minlength="3" placeholder="Description.." required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
+                        </div>
+                    </form>
+                    <a style="cursor: pointer; margin-top: 4px; color: var(--blue);" onclick='javascript:  appModule.createAlertBoxFunc(boardModule.editListForm, "You Want To Delete This List?<br><a style=\"cursor: pointer; color: var(--blue);\" onclick=\"javascript: boardModule.deleteListFunc();\">Yes </a>",0,"exclamation");'><i class="fa fa-trash"></i> Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal ••••••••••-->
+    <div class="modal" id="addTaskModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-plus color"></i> Add New Task</h5>
+                    <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('addTaskModalID');">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form name="addTaskForm">
+                        <div class="form-group">
+                            <label class="label">Content</label>
+                            <input type="text" class="form-control" name="content" minlength="5" placeholder="Content.." required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal ••••••••••-->
+    <div class="modal" id="viewTaskModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-bars color"></i> View Task</h5>
+                    <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('viewTaskModalID');">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills nav-fill" style="    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+">
+                        <li class="nav-item">
+                            <a class="nav-link active" style="cursor: pointer;" onclick="javascript: this.className = 'nav-link active'; this.parentNode.parentNode.children[1].children[0].className = 'nav-link'; document.getElementById('viewTaskTabID').children[1].className = 'tab-pane'; document.getElementById('viewTaskTabID').children[0].className = 'tab-pane active';">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="cursor: pointer;" onclick="javascript: this.className = 'nav-link active'; this.parentNode.parentNode.children[0].children[0].className = 'nav-link'; document.getElementById('viewTaskTabID').children[0].className = 'tab-pane'; document.getElementById('viewTaskTabID').children[1].className = 'tab-pane active';">Edit</a>
+                        </li>
+                    </ul>
                     <br>
-                    <hr>
-                    <center>
-                        <b class="text-muted">By Love Saroha<br> &copy; <span id="ID1"></span> </b>
-                    </center>
-                </div>
-            </div>
-        </div>
-    </template>
-    <template id="home_ID">
-        <div class="container">
-            <div class="card">
-                <div class="card-header bg-primary text-white ">
-                    <h5><i class="fas fa-leaf"></i> Dashboard</h5>
-                </div>
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2">Showing all boards..</h6>
-                    <a href="/#/" class="card-link" data-toggle="modal" data-target="#ID6"><i class="fas fa-plus"></i> Add New</a>
-                </div>
-            </div>
-            <br>
-            <div id="ID5" class="card-columns"></div>
-        </div>
-        <!-- Modal -->
-        <div class="modal" id="ID6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header  text-white bg-primary">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New Board</h5>
-                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-white">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form name="aboardForm">
-                            <div class="form-group">
-                                <label class="label">Name</label>
-                                <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
-                            </div>
-                            <div class="form-group">
-                                <label class="label">Description</label>
-                                <input type="text" class="form-control" name="desc" minlength="5" placeholder="Description.." required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal -->
-        <div class="modal" id="ID9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header text-white bg-primary">
-                        <h5 class="modal-title" id="exampleModalLabel">View User</h5>
-                        <button type="button" class="close" style="outline: 0;" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-white">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="nav nav-pills nav-fill" style="    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
-">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="ouser-tab" data-toggle="tab" href="#ouser" role="tab" aria-controls="ouser" aria-selected="true">Overview</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="puser-tab" data-toggle="tab" href="#puser" role="tab" aria-controls="puser" aria-selected="false">Preferences</a>
-                            </li>
-                        </ul>
-                        <br>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="ouser" role="tabpanel" aria-labelledby="ouser-tab">
-                            </div>
-                            <div class="tab-pane fade" id="puser" role="tabpanel" aria-labelledby="puser-tab">
-                                <label class="label">Color Schemes</label>
-                                <div class="col-12">
-                                    <colsch-comp class="row" style="border: 1px solid #eee;"></colsch-comp>
+                    <div class="tab-content" id="viewTaskTabID">
+                        <div class="tab-pane active">
+                        </div>
+                        <div class="tab-pane">
+                            <form name="editTaskForm">
+                                <div class="form-group">
+                                    <label class="label">Content</label>
+                                    <input type="text" class="form-control" name="content" minlength="5" placeholder="Content.." required>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </template>
-    <template id="board_ID">
-        <div class="container">
-            <board-comp></board-comp>
-            <br>
-            <div id="ID17" class="card-columns"></div>
-        </div>
-        <!-- Modal -->
-        <div class="modal" id="ID16" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header  text-white bg-primary">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New List</h5>
-                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-white">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form name="alistForm">
-                            <div class="form-group">
-                                <label class="label">Name</label>
-                                <input type="text" class="form-control" name="name" minlength="2" placeholder="Name.." required>
-                            </div>
-                            <div class="form-group">
-                                <label class="label">Description</label>
-                                <input type="text" class="form-control" name="desc" minlength="3" placeholder="Description.." required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal ••••••••••-->
-        <div class="modal" id="ID15" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header  text-white bg-primary">
-                        <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
-                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-white">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form name="ataskForm">
-                            <div class="form-group">
-                                <label class="label">Content</label>
-                                <input type="text" class="form-control" name="content" minlength="5" placeholder="Content.." required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" name="submit"> <b> Add</b></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal ••••••••••-->
-        <div class="modal" id="ID11" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header  text-white bg-primary">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Board</h5>
-                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-white">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form name="eboardForm">
-                            <div class="form-group">
-                                <label class="label">Name</label>
-                                <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
-                            </div>
-                            <div class="form-group">
-                                <label class="label">Description</label>
-                                <input type="text" class="form-control" name="desc" minlength="5" placeholder="Description.." required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
-                            </div>
-                        </form>
-                        <label class="label">Color Schemes</label>
-                        <div class="col-12">
-                            <colsch-comp class="row" style="border: 1px solid #eee;"></colsch-comp>
-                        </div>
-                        <br>
-                        <a style="cursor: pointer; color: var(--blue);" onclick='javascript:  c5.f2(`form[name="eboardForm"]`, -2, "You Want To Delete This Board?<br><a style=\"cursor: pointer; color: var(--blue);\" onclick=\"javascript: c4.f4();\">Yes </a>");'><i class="fa fa-trash"></i> Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal ••••••••••-->
-        <div class="modal" id="ID12" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header  text-white bg-primary">
-                        <h5 class="modal-title" id="exampleModalLabel">View List</h5>
-                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-white">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form name="elistForm">
-                            <div class="form-group">
-                                <label class="label">Name</label>
-                                <input type="text" class="form-control" name="name" minlength="2" placeholder="Name.." required>
-                            </div>
-                            <div class="form-group">
-                                <label class="label">Description</label>
-                                <input type="text" class="form-control" name="desc" minlength="3" placeholder="Description.." required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
-                            </div>
-                        </form>
-                        <a style="cursor: pointer; color: var(--blue);" onclick='javascript:  c5.f2(`form[name="elistForm"]`, -2, "You Want To Delete This List?<br><a style=\"cursor: pointer; color: var(--blue);\" onclick=\"javascript: c4.f7(this);\">Yes </a>");'><i class="fa fa-trash"></i> Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal ••••••••••-->
-        <div class="modal" id="ID13" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header  text-white bg-primary">
-                        <h5 class="modal-title" id="exampleModalLabel">View Task</h5>
-                        <button type="button" style="outline: 0;" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-white">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="nav nav-pills nav-fill" style="    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
-">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="otask-tab" data-toggle="tab" href="#otask" role="tab" aria-controls="otask" aria-selected="true">Overview</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="etask-tab" data-toggle="tab" href="#etask" role="tab" aria-controls="etask" aria-selected="false">Edit</a>
-                            </li>
-                        </ul>
-                        <br>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="otask" role="tabpanel" aria-labelledby="home-tab">
-                                <div id="ID14"></div>
-                            </div>
-                            <div class="tab-pane fade" id="etask" role="tabpanel" aria-labelledby="profile-tab">
-                                <form name="etaskForm">
-                                    <div class="form-group">
-                                        <label class="label">Content</label>
-                                        <input type="text" class="form-control" name="content" minlength="5" placeholder="Content.." required>
+                                <div class="form-group">
+                                    <div class="custom-control custom-toggle my-2">
+                                        <input type="checkbox" id="customToggle2" name="status" class="custom-control-input" value="0">
+                                        <label class="custom-control-label" for="customToggle2">Is Done?</label>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="custom-control custom-toggle my-2">
-                                            <input type="checkbox" id="customToggle2" name="status" class="custom-control-input" value="0">
-                                            <label class="custom-control-label" for="customToggle2">Is Done?</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
-                                    </div>
-                                </form>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
+                                </div>
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Move To</label>
-                                    <select class="custom-select" style="outline: 0;" id="ID18">
+                                    <select class="custom-select" style="outline: 0;">
                                     </select>
                                 </div>
-                                <a style="cursor: pointer; color: var(--blue);" onclick='javascript:  c5.f2(`form[name="etaskForm"]`, -2, "You Want To Delete This Task?<br><a style=\"cursor: pointer; color: var(--blue);\" onclick=\"javascript: c4.f12(this);\">Yes</a>");'><i class="fa fa-trash"></i> Delete</a>
-                            </div>
+                            </form>
+                            <a style="cursor: pointer; margin-top: 4px; color: var(--blue);" onclick='javascript:  appModule.createAlertBoxFunc(boardModule.editTaskForm, "You Want To Delete This Task?<br><a style=\"cursor: pointer; color: var(--blue);\" onclick=\"javascript: boardModule.deleteTaskFunc();\">Yes </a>",0,"exclamation");'><i class="fa fa-trash"></i> Delete</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </template>
-    <pro-one-view></pro-one-view>
-    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/assets/js/components.js"></script>
-    <script type="text/javascript" src="/assets/js/main.js"></script>
+    </div>
+    <div id="pageLoaderID" class="modal-backdrop">
+        <div class="loader"></div>
+    </div>
+    <script type="text/javascript" src="/assets/js/bundle.js"></script>
 </body>
 
 </html>

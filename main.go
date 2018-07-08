@@ -97,7 +97,7 @@ func main() {
 		}
 		u.genKeys()
 		res.Header().Set("Content-Type", "application/json")
-		res.Write([]byte("{\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
+		res.Write([]byte("{\"hemail\": \"" + getMD5Hash(u.Email) + "\",\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
 	})
 	/////////////////////////////////////////////
 	mux.HandleFunc("/user/update/conf", func(res http.ResponseWriter, req *http.Request) {
@@ -140,7 +140,7 @@ func main() {
 		}
 		u.genKeys()
 		res.Header().Set("Content-Type", "application/json")
-		res.Write([]byte("{\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
+		res.Write([]byte("{\"hemail\": \"" + getMD5Hash(u.Email) + "\",\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
 	})
 	/////////////////////////////////////////////
 	mux.HandleFunc("/user/boards", func(res http.ResponseWriter, req *http.Request) {
@@ -193,7 +193,6 @@ func main() {
 		b.Id = b.Created_at[2:4] + b.Created_at[5:7] + b.Created_at[8:10] + b.Created_at[17:19] + b.Created_at[20:22]
 		stm, _ := db.Prepare("INSERT INTO pr_one_boards (bid,bname ,bconf,bdesc,btasks,bstats,bcreated_at , bupdated_at) VALUES (?,?,?,? ,? ,?, ?,?);")
 		defer stm.Close()
-		b.Conf = "{\"cs\": 0}"
 		b.Stats = "[2,0,2,0,0]"
 		b.Tasks = "[{\"i\": 1,\"n\" : \"Todo\",\"d\" : \"List Of Tasks To Be Done\",\"ts\" : [],\"s\" :0},{\"i\": 2,\"n\" : \"Done\",\"d\" : \"List Of Completed Tasks\",\"ts\" : [],\"s\":1}]"
 		if _, err := stm.Exec(b.Id, b.Name, b.Conf, b.Desc, b.Tasks, b.Stats, time.Now(), time.Now()); err != nil {
