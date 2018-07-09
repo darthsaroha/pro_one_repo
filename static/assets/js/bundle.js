@@ -102,6 +102,13 @@ appModuleFunc.prototype.colorElemFunc = function(col, form, val) {
     });
     return el;
 }
+appModuleFunc.prototype.smallLoadingFunc = function(ele) {
+    if (ele.firstChild.className == 'loaderln') { return; }
+    let el = document.createElement('div');
+    el.id = 'loadingIconID';
+    el.className = 'loaderln';
+    ele.prepend(el);
+}
 appModuleFunc.prototype.colorPaletteFunc = function(el, si) {
     el.cs.value = si;
     const len = el.lastElementChild.previousElementSibling.children[3].children.length;
@@ -122,21 +129,25 @@ function userModuleFunc() {
 }
 userModuleFunc.prototype.loginFunc = function(e) {
     e.preventDefault();
+    appModule.smallLoadingFunc(loginForm);
     fetch("/user/auth", { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{ "email" : "${this.email.value}", "digest" : "${this.digest.value}"}` }).then(data => data.json())
         .then(data => {
             localStorage.setItem("userData", JSON.stringify(data));
             window.location.hash = "/";
         })
-        .catch(function(error) { appModule.createAlertBoxFunc(userModule.loginForm, "Cannot Find Record", 1, "exclamation"); });
+        .catch(function(error) { appModule.createAlertBoxFunc(userModule.loginForm, "Cannot Find Record", 1, "exclamation"); })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 userModuleFunc.prototype.joinFunc = function(e) {
     e.preventDefault();
+    appModule.smallLoadingFunc(joinForm);
     fetch("/user/join", { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{ "email" : "${this.email.value}", "digest" : "${this.digest.value}", "name" : "${this.name.value}"}` }).then(data => data.json())
         .then(data => {
             localStorage.setItem("userData", JSON.stringify(data));
             window.location.hash = "/";
         })
-        .catch(function(error) { appModule.createAlertBoxFunc(userModule.joinForm, "Cannot Create Record", 1, "exclamation"); });
+        .catch(function(error) { appModule.createAlertBoxFunc(userModule.joinForm, "Cannot Create Record", 1, "exclamation"); })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 userModuleFunc.prototype.showUserInfoFunc = function() {
     appModule.dashboardPage.children[0].children[0].children[0].children[1].innerHTML = ` <h5 class="mt-0">${appModule.userData.name}</h5>${appModule.userData.email}<br><a href="/#/welcome" style="color: var(--blue);"><i class="fas fa-power-off"></i> Log Out</a>`;
@@ -174,6 +185,7 @@ boardModuleFunc.prototype.prepEditBoardModalFunc = function(e) {
 }
 boardModuleFunc.prototype.addBoardFunc = function(e) {
     e.preventDefault();
+    appModule.smallLoadingFunc(addBoardForm);
     fetch("/user/board/create?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{ "name" : "${this.name.value}", "desc": "${this.desc.value}","conf" : "{\\"cs\\":${this.cs.value}}"}` }).then(data => data.json())
         .then(data => {
             this.reset();
@@ -181,7 +193,8 @@ boardModuleFunc.prototype.addBoardFunc = function(e) {
             boardModule.boardList.appendChild(boardModule.boardElementFunc(data));
             coreModule.closeModalFunc("addBoardModalID");
         })
-        .catch(function(error) { appModule.createAlertBoxFunc(boardModule.addBoardForm, "Cannot Create Board", 1, "exclamation"); });
+        .catch(function(error) { appModule.createAlertBoxFunc(boardModule.addBoardForm, "Cannot Create Board", 1, "exclamation"); })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 boardModuleFunc.prototype.boardElementFunc = function(data) {
     let el = document.createElement('div');
@@ -281,6 +294,7 @@ boardModuleFunc.prototype.getBoardFunc = function() {
 }
 boardModuleFunc.prototype.editBoardFunc = function(e) {
     e.preventDefault();
+    appModule.smallLoadingFunc(editBoardForm);
     fetch("/user/board/update?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"name" : "${this.name.value}" ,"desc" : "${this.desc.value}", "id" : "${boardModule.boardData.id}","conf" : "{\\"cs\\":${this.cs.value}}"}` }).then(data => data.json())
         .then(data => {
             [boardModule.boardData.conf.cs, boardModule.boardData.name, boardModule.boardData.desc] = [this.cs.value, this.name.value, this.desc.value];
@@ -288,7 +302,8 @@ boardModuleFunc.prototype.editBoardFunc = function(e) {
             boardModule.boardDetailFunc(boardModule.boardData);
             appModule.createAlertBoxFunc(boardModule.editBoardForm, "Succesfully Updated Board", 1, "check");
         })
-        .catch(function(error) { appModule.createAlertBoxFunc(boardModule.editBoardForm, "Cannot Edit Board", 1, "exclamation"); });
+        .catch(function(error) { appModule.createAlertBoxFunc(boardModule.editBoardForm, "Cannot Edit Board", 1, "exclamation"); })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 boardModuleFunc.prototype.addListFunc = function(e) {
     e.preventDefault();
@@ -296,6 +311,7 @@ boardModuleFunc.prototype.addListFunc = function(e) {
     boardModule.boardData.stats[2]++;
     let list = { "i": boardModule.boardData.stats[0], "n": this.name.value, "d": this.desc.value, "ts": [], s: 0 };
     boardModule.boardData.tasks.push(list);
+    appModule.smallLoadingFunc(addListForm);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
             boardModule.taskList.appendChild(boardModule.listElementFunc(list, (boardModule.boardData.tasks.length - 1)));
@@ -306,13 +322,15 @@ boardModuleFunc.prototype.addListFunc = function(e) {
             boardModule.boardData.stats[2]--;
             boardModule.boardData.tasks.pop();
             appModule.createAlertBoxFunc(boardModule.addListForm, "Cannot Create List", 1, "exclamation");
-        });
+        })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 boardModuleFunc.prototype.editListFunc = function(e) {
     e.preventDefault();
     let bk = { n: boardModule.boardData.tasks[boardModule.selectedList].n, d: boardModule.boardData.tasks[boardModule.selectedList].d, s: boardModule.boardData.tasks[boardModule.selectedList].s };
     boardModule.boardData.tasks[boardModule.selectedList].n = this.name.value;
     boardModule.boardData.tasks[boardModule.selectedList].d = this.desc.value;
+    appModule.smallLoadingFunc(editListForm);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
             boardModule.selectedListElem.childNodes[0].childNodes[0].childNodes[0].innerHTML = this.name.value;
@@ -323,7 +341,8 @@ boardModuleFunc.prototype.editListFunc = function(e) {
             boardModule.boardData.tasks[boardModule.selectedList].n = bk.n;
             boardModule.boardData.tasks[boardModule.selectedList].d = bk.d;
             appModule.createAlertBoxFunc(boardModule.editListForm, "Cannot Update List", 1, "exclamation");
-        });
+        })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 boardModuleFunc.prototype.addTaskFunc = function(e) {
     e.preventDefault();
@@ -333,6 +352,7 @@ boardModuleFunc.prototype.addTaskFunc = function(e) {
     let task = { "c": this.content.value, "s": boardModule.boardData.tasks[boardModule.selectedList].s, dd: dt.getDate(), dm: (dt.getMonth() + 1), dy: dt.getFullYear(), us: appModule.userData.email };
     boardModule.boardData.stats[4] += task.s ? 1 : 0;
     boardModule.boardData.tasks[boardModule.selectedList].ts.push(task);
+    appModule.smallLoadingFunc(addTaskForm);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
             boardModule.selectedListElem.childNodes[0].childNodes[3].appendChild(boardModule.taskElemFunc(task, (boardModule.boardData.tasks[boardModule.selectedList].ts.length - 1), boardModule.selectedList));
@@ -343,7 +363,8 @@ boardModuleFunc.prototype.addTaskFunc = function(e) {
             boardModule.boardData.stats[3]--;
             boardModule.boardData.tasks[boardModule.selectedList].ts.pop();
             appModule.createAlertBoxFunc(boardModule.addTaskForm, "Cannot Add Task", 1, "exclamation");
-        });
+        })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 boardModuleFunc.prototype.editTaskFunc = function(e) {
     e.preventDefault();
@@ -353,6 +374,7 @@ boardModuleFunc.prototype.editTaskFunc = function(e) {
     if (boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s != bk.s) {
         boardModule.boardData.stats[4] += this.status.checked ? 1 : -1;
     }
+    appModule.smallLoadingFunc(editTaskForm);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
             boardModule.selectedTaskElem.childNodes[0].childNodes[0].innerHTML = this.content.value;
@@ -362,7 +384,8 @@ boardModuleFunc.prototype.editTaskFunc = function(e) {
         .catch(function(error) {
             boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].c = bk.c;
             appModule.createAlertBoxFunc(boardModule.editTaskForm, "Cannot Update Task", 1, "exclamation");
-        });
+        })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 boardModuleFunc.prototype.moveTaskFunc = function(e) {
     e.preventDefault();
@@ -384,6 +407,7 @@ boardModuleFunc.prototype.moveTaskFunc = function(e) {
         }
     }
     boardModule.boardData.tasks[this.value].ts.push(task);
+    appModule.smallLoadingFunc(editTaskForm);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
             boardModule.selectedTaskElem.remove();
@@ -392,7 +416,8 @@ boardModuleFunc.prototype.moveTaskFunc = function(e) {
             document.getElementById(`${boardModule.boardData.tasks[this.value].i}TaskListID`).appendChild(boardModule.selectedTaskElem);
             [boardModule.selectedList, boardModule.selectedTask] = [this.value, ti];
         })
-        .catch(function(error) {});
+        .catch(function(error) {})
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 boardModuleFunc.prototype.deleteBoardFunc = function() {
     fetch("/user/board/delete?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2] + "&bdi=" + boardModule.boardData.id, { method: 'delete', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{}` }).then(data => data.json())
