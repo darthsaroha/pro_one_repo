@@ -8,6 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/assets/css/bundle.css">
     <style type="text/css">
+body {
+    padding-top: 30px;
+}
     .nav-pills .nav-link.active:hover,
     .nav-pills .show>.nav-link {
         color: #fff;
@@ -134,21 +137,13 @@
             </div>
         </div>
     </div>
-    <div class="container d-none" id="dashboardPageID" >
-        <div class="card"  style="border-top: 3px solid var(--blue);">
-            <div class="card-body" style="background-image: url('/assets/images/back.jpg'); -webkit-box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);
--moz-box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);
-box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);">
-                <div class="media">
-                    <img class="mr-3 img-thumbnail" src="..." alt="Generic placeholder image">
-                    <div class="media-body">
-                    </div>
-                </div>
-                <hr style="margin-left: -20px; margin-right: -20px;">
-                <a style="cursor: pointer; color: var(--blue);" class="card-link" onclick="javascript: coreModule.showModalFunc('addBoardModalID');appModule.colorPaletteFunc(boardModule.addBoardForm, 0);"><i class="fas fa-plus"></i> Add New</a>
-            </div>
-        </div>
-        <br>
+    <div class="container d-none" id="dashboardPageID">
+        <h3><i class="fas fa-leaf color"></i> Dashboard</h3>
+        <font class="text-muted">Showing All Your Boards</font><hr>
+                <a style="cursor: pointer; color: #fff;" class="btn btn-danger card-link" onclick="javascript: coreModule.showModalFunc('addBoardModalID');appModule.colorPaletteFunc(boardModule.addBoardForm, 0);"><i class="fas fa-plus"></i> Add Board</a>
+                   <a style="cursor: pointer; color: var(--blue);" href="/#/welcome" class="card-link"><i class="fas fa-power-off"></i> LogOut</a>
+                <a style="cursor: pointer; color: var(--blue);" class="card-link"><i class="far fa-user"></i> View Profile</a>
+        <hr>
         <div id="boardListID" class="card-columns"></div>
     </div>
     <div class="modal" id="addBoardModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
@@ -188,9 +183,9 @@ box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);">
         </div>
     </div>
     <div class="container d-none" id="boardPageID">
-        <div id="boardDetailID" class="card" style="border-top: 3px solid var(--blue);">
+        <div id="boardDetailID">
         </div>
-        <br>
+        <hr>
         <div id="taskListID" class="card-columns"></div>
     </div>
     <div class="modal" id="editBoardModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

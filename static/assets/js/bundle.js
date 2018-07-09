@@ -81,7 +81,6 @@ appModuleFunc.prototype.initDashboardFunc = function() {
     appModule.isLoggedFunc();
     document.documentElement.style.setProperty('--blue', appModule.colorSchemes[appModule.userData.conf.cs]);
     boardModule.getBoardsFunc();
-    userModule.showUserInfoFunc();
 }
 appModuleFunc.prototype.initBoardFunc = function() {
     appModule.isLoggedFunc();
@@ -147,10 +146,6 @@ userModuleFunc.prototype.joinFunc = function(e) {
         })
         .catch(function(error) { appModule.createAlertBoxFunc(userModule.joinForm, "Cannot Create Record", 1, "exclamation"); })
         .then(function() { document.getElementById('loadingIconID').remove(); });
-}
-userModuleFunc.prototype.showUserInfoFunc = function() {
-    appModule.dashboardPage.children[0].children[0].children[0].children[1].innerHTML = ` <h5 class="mt-0">${appModule.userData.name}</h5>${appModule.userData.email}<br><a href="/#/welcome" style="color: var(--blue);"><i class="fas fa-power-off"></i> Log Out</a>`;
-    appModule.dashboardPage.children[0].children[0].children[0].children[0].src = `https://www.gravatar.com/avatar/${appModule.userData.hemail}`;
 }
 let userModule = new userModuleFunc();
 //BOARD MODULE
@@ -270,10 +265,7 @@ boardModuleFunc.prototype.getBoardsFunc = function() {
 }
 boardModuleFunc.prototype.boardDetailFunc = function(data) {
     let date = new Date(data.created_at);
-    boardModule.boardDetail.innerHTML = `<div class="card-body" style="background-image: url('/assets/images/back.jpg'); -webkit-box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);
--moz-box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);
-box-shadow: inset 10px 10px 300px 200px rgba(255,255,255,0.78);">
- <h5><i class="far fa-clipboard color"></i> ${data.name}</h5><br><h6 class="card-subtitle text-muted">${data.desc}</h6><i class="far fa-calendar-alt color"></i> <span> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</span><hr style="margin-left: -20px; margin-right: -20px;"><a href="/#/" class="card-link" style="color: var(--blue);"><i class="fas fa-arrow-left"></i> Back</a><a style="cursor: pointer; color: var(--blue);" class="card-link" onclick="coreModule.showModalFunc('addListModalID')"><i class="fas fa-plus"></i> Add List</a><a style="cursor: pointer; color: var(--blue);" onclick="boardModule.prepEditBoardModalFunc();" class="card-link"><i class="fas fa-edit"></i> Edit</a></div>
+    boardModule.boardDetail.innerHTML = `<h4><i class="far fa-clipboard color"></i> ${data.name}</h4><font class="text-muted">${data.desc}</font><br><i class="far fa-calendar-alt color"></i> <span> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</span><hr><a href="/#/" class="card-link" style="color: var(--blue);"><i class="fas fa-arrow-left"></i> Back</a><a style="cursor: pointer; color: #fff;" class="btn btn-danger card-link" onclick="coreModule.showModalFunc('addListModalID')"><i class="fas fa-plus"></i> Add List</a><a style="cursor: pointer; color: var(--blue);" onclick="boardModule.prepEditBoardModalFunc();" class="card-link"><i class="fas fa-edit"></i> Edit</a>
  `;
 }
 boardModuleFunc.prototype.getBoardFunc = function() {
@@ -314,7 +306,6 @@ boardModuleFunc.prototype.addListFunc = function(e) {
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
             boardModule.taskList.appendChild(boardModule.listElementFunc(list, (boardModule.boardData.tasks.length - 1)));
-            this.reset();
             coreModule.closeModalFunc('addListModalID');
         })
         .catch(function(error) {
@@ -322,7 +313,7 @@ boardModuleFunc.prototype.addListFunc = function(e) {
             boardModule.boardData.tasks.pop();
             appModule.createAlertBoxFunc(boardModule.addListForm, "Cannot Create List", 1, "exclamation");
         })
-        .then(function() { document.getElementById('loadingIconID').remove(); });
+        .then(function() { document.getElementById('loadingIconID').remove(); this.reset(); });
 }
 boardModuleFunc.prototype.editListFunc = function(e) {
     e.preventDefault();

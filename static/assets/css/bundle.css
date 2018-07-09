@@ -2467,7 +2467,7 @@ fieldset:disabled a.btn {
 .btn-danger:not(:disabled):not(.disabled).active:focus,
 .btn-danger:not(:disabled):not(.disabled):active:focus,
 .show>.btn-danger.dropdown-toggle:focus {
-    box-shadow: 0 0 0 .2rem rgba(220, 53, 69, .5)
+    background-color: var(--blue);
 }
 
 .btn-light.disabled,
@@ -12038,27 +12038,26 @@ select.form-control-lg:not([size]):not([multiple]) {
 
 .btn-danger {
     color: #fff;
-    border-color: #c4183c;
-    background-color: #c4183c;
+    border-color: var(--blue);
+    border-radius: 15px;
+    background-color: var(--blue);
     box-shadow: none
 }
 
 .btn-danger:hover {
     color: #fff;
-    background-color: #ad1535;
-    border-color: #ad1535;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .05), 0 4px 10px rgba(196, 24, 60, .25)
+    border-color: var(--blue);
+    background-color: var(--blue);
 }
 
 .btn-danger.focus,
 .btn-danger:focus {
-    box-shadow: 0 0 0 3px rgba(196, 24, 60, .15), 0 3px 15px rgba(196, 24, 60, .2), 0 2px 5px rgba(0, 0, 0, .1)
+    background-color: var(--blue);
 }
 
 .btn-danger.disabled,
 .btn-danger:disabled {
-    background-color: #c4183c;
-    border-color: #c4183c;
+    background-color: var(--blue);
     box-shadow: none;
     cursor: not-allowed
 }
@@ -12067,10 +12066,8 @@ select.form-control-lg:not([size]):not([multiple]) {
 .btn-danger:not(:disabled):not(.disabled):active,
 .show>.btn-danger.dropdown-toggle {
     color: #fff;
-    background-color: #ad1535;
-    border-color: #97122e;
+    background-color: var(--blue);
     background-image: none;
-    box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125)!important
 }
 
 .btn-light {
