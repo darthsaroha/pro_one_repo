@@ -302,7 +302,7 @@ boardModuleFunc.prototype.editBoardFunc = function(e) {
             appModule.createAlertBoxFunc(boardModule.editBoardForm, "Succesfully Updated Board", 1, "check");
         })
         .catch(function(error) { appModule.createAlertBoxFunc(boardModule.editBoardForm, "Cannot Edit Board", 1, "exclamation"); })
-        .then(function() { document.getElementById('loadingIconID').remove(); });
+        .then(function() {  });
 }
 boardModuleFunc.prototype.addListFunc = function(e) {
     e.preventDefault();
