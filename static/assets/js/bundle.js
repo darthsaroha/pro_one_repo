@@ -103,11 +103,10 @@ appModuleFunc.prototype.colorElemFunc = function(col, form, val) {
     return el;
 }
 appModuleFunc.prototype.smallLoadingFunc = function(ele) {
-    if (ele.firstChild.className == 'loaderln') { return; }
     let el = document.createElement('div');
     el.id = 'loadingIconID';
     el.className = 'loaderln';
-    ele.appendChild(el);
+    ele.parentNode.appendChild(el);
 }
 appModuleFunc.prototype.colorPaletteFunc = function(el, si) {
     el.cs.value = si;
