@@ -107,7 +107,7 @@ appModuleFunc.prototype.smallLoadingFunc = function(ele) {
     let el = document.createElement('div');
     el.id = 'loadingIconID';
     el.className = 'loaderln';
-    ele.prepend(el);
+    ele.appendChild(el);
 }
 appModuleFunc.prototype.colorPaletteFunc = function(el, si) {
     el.cs.value = si;
