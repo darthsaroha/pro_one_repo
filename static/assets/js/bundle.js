@@ -156,7 +156,7 @@ userModuleFunc.prototype.prepProfileModalFunc = function() {
     appModule.colorPaletteFunc(userModule.editUserForm, appModule.userData.conf.cs);
     if (userModule.userInfo.children.length > 1) { return; }
     let date = new Date(appModule.userData.created_at);
-    userModule.userInfo.innerHTML = `<div class="col-3" style="text-align: center;"><img class="mr-3 img-responsive" src="https://www.gravatar.com/avatar/${md5(appModule.userData.email)}" alt=""></div><div class="col-9"><b class="text-muted">User Name</b><br><span id="userNameID">${appModule.userData.name}</span><br><b class="text-muted">Email</b><br>${appModule.userData.email}<br><br><b class="text-muted">Joined On</b><br><i class="far fa-calendar-alt color"></i> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</div>`;
+    userModule.userInfo.innerHTML = `<div class="col-3" style="text-align: center;"><img class="img-thumbnail" src="https://www.gravatar.com/avatar/${md5(appModule.userData.email)}?s=100" alt=""></div><div class="col-9"><b class="text-muted">Name</b><br><span id="userNameID">${appModule.userData.name}</span><br><b class="text-muted">Email</b><br>${appModule.userData.email}<br><br><b class="text-muted">Joined On</b><br><i class="far fa-calendar-alt color"></i> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</div>`;
 }
 userModuleFunc.prototype.editUserFunc = function(e) {
     e.preventDefault();
@@ -237,7 +237,6 @@ boardModuleFunc.prototype.listElementFunc = function(data) {
     }
     el.childNodes[0].childNodes[0].addEventListener('click', function(e) {
         boardModule.editListForm.name.value = data.n;
-        responsive
         boardModule.editListForm.desc.value = data.d;
         boardModule.selectedListElem = el;
         coreModule.showModalFunc('editListModalID');
@@ -262,7 +261,7 @@ boardModuleFunc.prototype.taskElemFunc = function(data) {
             boardModule.editTaskForm.status.value = 0;
         }
         coreModule.showModalFunc('viewTaskModalID');
-        document.getElementById("viewTaskTabID").children[0].innerHTML = `<b class="text-muted">Content</b><br><span>${data.c}</span><hr><b class="text-muted">Added By</b><br><div class="media"><img class="mr-3 img-thumbnail" src="https://www.gravatar.com/avatar/${md5(data.us)}/60x60" alt=""><div class="media-body">${data.us}<br><i class="far fa-calendar-alt color"></i> ${data.dd}/${data.dm}/${data.dy}</div></div>`;
+        document.getElementById("viewTaskTabID").children[0].innerHTML = `<b class="text-muted">Content</b><br><span>${data.c}</span><hr><b class="text-muted">Added By</b><br><div class="media"><img class="mr-3 img-thumbnail" src="https://www.gravatar.com/avatar/${md5(data.us)}?s=50" alt=""><div class="media-body">${data.us}<br><i class="far fa-calendar-alt color"></i> ${data.dd}/${data.dm}/${data.dy}</div></div>`;
         boardModule.editTaskForm.children[3].children[1].innerHTML = '';
         let opt = document.createElement('option');
         opt.value = boardModule.selectedList;
