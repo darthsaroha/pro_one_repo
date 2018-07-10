@@ -200,30 +200,33 @@ boardModuleFunc.prototype.boardElementFunc = function(data) {
     <div class="progress"><div class="progress-bar" role="progressbar" style="width: ${(data.stats[4]/data.stats[3])*100}%" aria-valuenow="${(data.stats[4]/data.stats[3])*100}" aria-valuemin="0" aria-valuemax="100"></div></div><b class="text-muted"> Progress</b></div></center></div>`;
     return el;
 }
-boardModuleFunc.prototype.listElementFunc = function(data, ind) {
+boardModuleFunc.prototype.listElementFunc = function(data) {
     let el = document.createElement('div');
     el.className = "card";
+    el.data = data.i;
     el.style = "max-width: 20rem; margin: auto; margin-bottom: 10px;";
-    el.innerHTML = `<div class="card-body"><h4 class="card-title"><a style="cursor: pointer;">${data.n}</a></h4><h6 class="card-subtitle mb-2 text-muted">${data.d}</h6><a class="card-link" style="cursor: pointer; color: var(--blue);" onclick="javascript: coreModule.showModalFunc('addTaskModalID'); boardModule.selectedList = ${ind}; boardModule.selectedListElem = this.parentNode.parentNode; boardModule.addTaskForm.reset();"><i class="fas fa-plus"></i> Add Task</a><div style="padding-top: 9px;" id="${data.i}TaskListID"></div></div>`;
+    el.innerHTML = `<div class="card-body"><h4 class="card-title"><a style="cursor: pointer;">${data.n}</a> <span id="${data.i}ListTotalID" class="badge badge-secondary">${data.ts.length}</span></h4><h6 class="card-subtitle mb-2 text-muted">${data.d}</h6><a class="card-link" style="cursor: pointer; color: var(--blue);" onclick="javascript: coreModule.showModalFunc('addTaskModalID'); boardModule.selectedListElem = this.parentNode.parentNode; boardModule.addTaskForm.reset();"><i class="fas fa-plus"></i> Add Task</a><br><i class="fas fa-angle-down fa-2x" style="cursor: pointer; margin-left: 45%; position: relative; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i><div class="d-none" style="padding-top: 9px; margin-top: 8px;" id="${data.i}TaskListID"></div></div>`;
     for (let i = 0; i < data.ts.length; i++) {
-        el.childNodes[0].childNodes[3].appendChild(boardModule.taskElemFunc(data.ts[i], i, ind));
+        el.childNodes[0].childNodes[5].appendChild(boardModule.taskElemFunc(data.ts[i]));
     }
     el.childNodes[0].childNodes[0].addEventListener('click', function(e) {
         boardModule.editListForm.name.value = data.n;
         boardModule.editListForm.desc.value = data.d;
-        boardModule.selectedList = ind;
         boardModule.selectedListElem = el;
         coreModule.showModalFunc('editListModalID');
     });
     return el;
 }
-boardModuleFunc.prototype.taskElemFunc = function(data, ind, lind) {
+boardModuleFunc.prototype.taskElemFunc = function(data) {
     let el = document.createElement('div');
     el.className = "card";
+    el.data = data.i;
+    el.datali = data.li;
     el.style = "cursor: pointer; margin-bottom: 12px;";
     el.innerHTML = `<div class="card-body" style="padding: -4px; "><h6 class = "card-title">${data.c.substring(0,120)}..</h6></div>`;
     el.addEventListener('click', function(e) {
-        [boardModule.selectedTaskElem, boardModule.selectedList, boardModule.selectedTask, boardModule.editTaskForm.content.value] = [el, lind, ind, data.c];
+        [boardModule.selectedTaskElem, boardModule.editTaskForm.content.value] = [el, data.c];
+        boardModule.findList(el.datali);
         if (data.s == 1) {
             boardModule.editTaskForm.status.checked = true;
             boardModule.editTaskForm.status.value = 1;
@@ -232,15 +235,15 @@ boardModuleFunc.prototype.taskElemFunc = function(data, ind, lind) {
             boardModule.editTaskForm.status.value = 0;
         }
         coreModule.showModalFunc('viewTaskModalID');
-        document.getElementById("viewTaskTabID").children[0].innerHTML = `<b class="text-muted">Content</b><br>${data.c}<hr><b class="text-muted">Added By</b><br><div class="media"><img class="mr-3 img-thumbnail" src="https://www.gravatar.com/avatar/${md5(data.us)}/60x60" alt=""><div class="media-body">${data.us}<br><i class="far fa-calendar-alt color"></i> ${data.dd}/${data.dm}/${data.dy}</div></div>`;
+        document.getElementById("viewTaskTabID").children[0].innerHTML = `<b class="text-muted">Content</b><br><span>${data.c}</span><hr><b class="text-muted">Added By</b><br><div class="media"><img class="mr-3 img-thumbnail" src="https://www.gravatar.com/avatar/${md5(data.us)}/60x60" alt=""><div class="media-body">${data.us}<br><i class="far fa-calendar-alt color"></i> ${data.dd}/${data.dm}/${data.dy}</div></div>`;
         boardModule.editTaskForm.children[3].children[1].innerHTML = '';
         let opt = document.createElement('option');
-        opt.value = lind;
-        opt.style = "outline: 0;"
-        opt.innerHTML = boardModule.boardData.tasks[lind].n;
+        opt.value = boardModule.selectedList;
+        opt.style = "outline: 0;";
+        opt.innerHTML = boardModule.boardData.tasks[boardModule.selectedList].n;
         boardModule.editTaskForm.children[3].children[1].appendChild(opt);
         for (let i = 0; i < boardModule.boardData.tasks.length; i++) {
-            if (i != lind) {
+            if (boardModule.boardData.tasks[i].i != el.datali) {
                 let e = document.createElement('option');
                 e.value = i;
                 e.innerHTML = boardModule.boardData.tasks[i].n;
@@ -277,11 +280,15 @@ boardModuleFunc.prototype.getBoardFunc = function() {
             boardModule.boardData = data;
             boardModule.boardDetailFunc(data);
             for (let i = 0; i < data.tasks.length; i++) {
-                boardModule.taskList.appendChild(boardModule.listElementFunc(data.tasks[i], i));
+                boardModule.taskList.appendChild(boardModule.listElementFunc(data.tasks[i]));
             }
             appModule.pageLoader.className = 'modal-backdrop d-none';
         })
-        .catch(function(error) { window.location.hash = "/"; return; });
+        .catch(function(error) {
+            console.log(error);
+            window.location.hash = "/";
+            return;
+        });
 }
 boardModuleFunc.prototype.editBoardFunc = function(e) {
     e.preventDefault();
@@ -294,7 +301,7 @@ boardModuleFunc.prototype.editBoardFunc = function(e) {
             appModule.createAlertBoxFunc(boardModule.editBoardForm, "Succesfully Updated Board", 1, "check");
         })
         .catch(function(error) { appModule.createAlertBoxFunc(boardModule.editBoardForm, "Cannot Edit Board", 1, "exclamation"); })
-        .then(function() { document.getElementById('loadingIconID').remove();  });
+        .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 boardModuleFunc.prototype.addListFunc = function(e) {
     e.preventDefault();
@@ -305,7 +312,8 @@ boardModuleFunc.prototype.addListFunc = function(e) {
     appModule.smallLoadingFunc(addListForm);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
-            boardModule.taskList.appendChild(boardModule.listElementFunc(list, (boardModule.boardData.tasks.length - 1)));
+            this.reset();
+            boardModule.taskList.appendChild(boardModule.listElementFunc(list));
             coreModule.closeModalFunc('addListModalID');
         })
         .catch(function(error) {
@@ -313,10 +321,27 @@ boardModuleFunc.prototype.addListFunc = function(e) {
             boardModule.boardData.tasks.pop();
             appModule.createAlertBoxFunc(boardModule.addListForm, "Cannot Create List", 1, "exclamation");
         })
-        .then(function() { document.getElementById('loadingIconID').remove(); this.reset(); });
+        .then(function() { document.getElementById('loadingIconID').remove(); });
+}
+boardModuleFunc.prototype.findList = function(id) {
+    for (let i = 0; i < boardModule.boardData.tasks.length; i++) {
+        if (boardModule.boardData.tasks[i].i == id) {
+            boardModule.selectedList = i;
+            return;
+        }
+    }
+}
+boardModuleFunc.prototype.findTask = function(id) {
+    for (let i = 0; i < boardModule.boardData.tasks[boardModule.selectedList].ts.length; i++) {
+        if (boardModule.boardData.tasks[boardModule.selectedList].ts[i].i == id) {
+            boardModule.selectedTask = i;
+            return;
+        }
+    }
 }
 boardModuleFunc.prototype.editListFunc = function(e) {
     e.preventDefault();
+    boardModule.findList(boardModule.selectedListElem.data);
     let bk = { n: boardModule.boardData.tasks[boardModule.selectedList].n, d: boardModule.boardData.tasks[boardModule.selectedList].d, s: boardModule.boardData.tasks[boardModule.selectedList].s };
     boardModule.boardData.tasks[boardModule.selectedList].n = this.name.value;
     boardModule.boardData.tasks[boardModule.selectedList].d = this.desc.value;
@@ -337,15 +362,17 @@ boardModuleFunc.prototype.editListFunc = function(e) {
 boardModuleFunc.prototype.addTaskFunc = function(e) {
     e.preventDefault();
     let dt = new Date();
+    boardModule.findList(boardModule.selectedListElem.data);
     boardModule.boardData.stats[1]++;
     boardModule.boardData.stats[3]++;
-    let task = { "c": this.content.value, "s": boardModule.boardData.tasks[boardModule.selectedList].s, dd: dt.getDate(), dm: (dt.getMonth() + 1), dy: dt.getFullYear(), us: appModule.userData.email };
+    let task = { "i": boardModule.boardData.stats[1], "li": boardModule.selectedListElem.data, "c": this.content.value, "s": boardModule.boardData.tasks[boardModule.selectedList].s, "dd": dt.getDate(), "dm": (dt.getMonth() + 1), "dy": dt.getFullYear(), "us": appModule.userData.email };
     boardModule.boardData.stats[4] += task.s ? 1 : 0;
     boardModule.boardData.tasks[boardModule.selectedList].ts.push(task);
     appModule.smallLoadingFunc(addTaskForm);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
-            boardModule.selectedListElem.childNodes[0].childNodes[3].appendChild(boardModule.taskElemFunc(task, (boardModule.boardData.tasks[boardModule.selectedList].ts.length - 1), boardModule.selectedList));
+            boardModule.selectedListElem.childNodes[0].children[0].children[1].innerHTML = boardModule.boardData.tasks[boardModule.selectedList].ts.length;
+            boardModule.selectedListElem.childNodes[0].childNodes[5].appendChild(boardModule.taskElemFunc(task));
             this.reset();
             coreModule.closeModalFunc('addTaskModalID');
         })
@@ -358,6 +385,8 @@ boardModuleFunc.prototype.addTaskFunc = function(e) {
 }
 boardModuleFunc.prototype.editTaskFunc = function(e) {
     e.preventDefault();
+    boardModule.findList(boardModule.selectedTaskElem.datali);
+    boardModule.findTask(boardModule.selectedTaskElem.data);
     let bk = { c: boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].c, s: boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s };
     boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].c = this.content.value;
     boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s = this.status.checked ? 1 : 0;
@@ -368,7 +397,7 @@ boardModuleFunc.prototype.editTaskFunc = function(e) {
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
             boardModule.selectedTaskElem.childNodes[0].childNodes[0].innerHTML = this.content.value;
-            document.getElementById("viewTaskTabID").children[0].innerHTML = `<b class="text-muted">Content</b><p class="card-title">${this.content.value}</p>`;
+            document.getElementById("viewTaskTabID").children[0].children[2].innerHTML = this.content.value;
             appModule.createAlertBoxFunc(boardModule.editTaskForm, "Succesfully Updated Task", 1, "check");
         })
         .catch(function(error) {
@@ -379,10 +408,13 @@ boardModuleFunc.prototype.editTaskFunc = function(e) {
 }
 boardModuleFunc.prototype.moveTaskFunc = function(e) {
     e.preventDefault();
+    boardModule.findList(boardModule.selectedTaskElem.datali);
+    boardModule.findTask(boardModule.selectedTaskElem.data);
     let task = boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask];
     if (task == null) {
         return;
     }
+    task.li = boardModule.boardData.tasks[this.value].i;
     boardModule.boardData.tasks[boardModule.selectedList].ts.splice(boardModule.selectedTask, 1);
     task.s = boardModule.boardData.tasks[this.value].s;
     if (boardModule.boardData.tasks[boardModule.selectedList].s != boardModule.boardData.tasks[this.value].s) {
@@ -400,11 +432,11 @@ boardModuleFunc.prototype.moveTaskFunc = function(e) {
     appModule.smallLoadingFunc(editTaskForm);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
+            document.getElementById(`${boardModule.selectedTaskElem.datali}ListTotalID`).innerHTML = parseInt(document.getElementById(`${boardModule.selectedTaskElem.datali}ListTotalID`).innerHTML) - 1;
             boardModule.selectedTaskElem.remove();
-            let ti = boardModule.boardData.tasks[this.value].ts.length - 1;
-            boardModule.selectedTaskElem = boardModule.taskElemFunc(task, ti, this.value);
+            boardModule.selectedTaskElem = boardModule.taskElemFunc(task);
+            document.getElementById(`${boardModule.selectedTaskElem.datali}ListTotalID`).innerHTML = parseInt(document.getElementById(`${boardModule.selectedTaskElem.datali}ListTotalID`).innerHTML) + 1;
             document.getElementById(`${boardModule.boardData.tasks[this.value].i}TaskListID`).appendChild(boardModule.selectedTaskElem);
-            [boardModule.selectedList, boardModule.selectedTask] = [this.value, ti];
         })
         .catch(function(error) {})
         .then(function() { document.getElementById('loadingIconID').remove(); });
@@ -421,6 +453,7 @@ boardModuleFunc.prototype.deleteBoardFunc = function() {
 }
 boardModuleFunc.prototype.deleteListFunc = function() {
     let bk = [...boardModule.boardData.tasks];
+    boardModule.findList(boardModule.selectedListElem.data);
     boardModule.boardData.stats[2]--;
     for (let i = 0; i < boardModule.boardData.tasks[boardModule.selectedList].ts.length; i++) {
         boardModule.boardData.stats[3]--;
@@ -443,6 +476,8 @@ boardModuleFunc.prototype.deleteListFunc = function() {
 }
 boardModuleFunc.prototype.deleteTaskFunc = function() {
     boardModule.boardData.stats[3]--;
+    boardModule.findList();
+    boardModule.findTask();
     if (boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s == 1) {
         boardModule.boardData.stats[4]--;
     }
@@ -450,6 +485,7 @@ boardModuleFunc.prototype.deleteTaskFunc = function() {
     boardModule.boardData.tasks[boardModule.selectedList].ts.splice(boardModule.selectedTask, 1);
     fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
+            document.getElementById(`${boardModule.boardData.tasks[boardModule.selectedList].i}ListTotalID`).innerHTML = boardModule.boardData.tasks[boardModule.selectedList].ts.length;
             boardModule.selectedTaskElem.remove();
             coreModule.closeModalFunc('viewTaskModalID');
         })

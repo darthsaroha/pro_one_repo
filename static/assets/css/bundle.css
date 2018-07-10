@@ -2351,7 +2351,7 @@ input[type=reset].btn-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none
+    user-select: none;
 }
 
 .custom-control-label::before,
@@ -3225,7 +3225,9 @@ tbody.collapse.show {
     display: inline-block;
     line-height: 1;
     text-align: center;
-    vertical-align: baseline
+    border-radius: 50%;
+    vertical-align: baseline;
+    background-color: 868e96;
 }
 
 .badge:empty {
@@ -14094,7 +14096,8 @@ a.badge {
     padding: .375rem .5rem;
     font-size: 75%;
     color: #fff;
-    border-radius: .375rem
+    border-radius: 10rem;
+    background-color: 868e96;
 }
 
 .badge-pill {
@@ -14127,14 +14130,14 @@ a.badge {
 
 .badge-secondary {
     color: #fff;
-    background-color: #5A6169
+    background-color: #868e96;
 }
 
 .badge-secondary[href]:focus,
 .badge-secondary[href]:hover {
     color: #fff;
     text-decoration: none;
-    background-color: #42484e
+    background-color: #868e96;
 }
 
 .badge-outline-secondary {
