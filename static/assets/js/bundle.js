@@ -161,6 +161,7 @@ function boardModuleFunc() {
     this.taskList = document.getElementById(`taskListID`);
     this.boardsData = [];
     this.boardData = {};
+    this.tempBoardData = {};
     this.selectedList = 0;
     this.selectedListElem = {};
     this.selectedTask = 0;
@@ -268,8 +269,7 @@ boardModuleFunc.prototype.getBoardsFunc = function() {
 }
 boardModuleFunc.prototype.boardDetailFunc = function(data) {
     let date = new Date(data.created_at);
-    boardModule.boardDetail.innerHTML = `<h4><i class="far fa-clipboard color"></i> ${data.name}</h4><font class="text-muted">${data.desc}</font><br><i class="far fa-calendar-alt color"></i> <span> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</span><hr><a href="/#/" class="card-link" style="color: var(--blue);"><i class="fas fa-arrow-left"></i> Back</a><a style="cursor: pointer; color: #fff;" class="btn btn-danger card-link" onclick="coreModule.showModalFunc('addListModalID')"><i class="fas fa-plus"></i> Add List</a><a style="cursor: pointer; color: var(--blue);" onclick="boardModule.prepEditBoardModalFunc();" class="card-link"><i class="fas fa-edit"></i> Edit</a>
- `;
+    boardModule.boardDetail.innerHTML = `<h4><i class="far fa-clipboard color"></i> ${data.name}</h4><font class="text-muted">${data.desc}</font><br><i class="far fa-calendar-alt color"></i> <span> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</span><hr><a href="/#/" class="card-link" style="color: var(--blue);"><i class="fas fa-arrow-left"></i> Back</a><a style="cursor: pointer; color: #fff;" class="btn btn-danger card-link" onclick="coreModule.showModalFunc('addListModalID')"><i class="fas fa-plus"></i> Add List</a><a style="cursor: pointer; color: var(--blue);" onclick="boardModule.prepEditBoardModalFunc();" class="card-link"><i class="fas fa-edit"></i> Edit</a>`;
 }
 boardModuleFunc.prototype.getBoardFunc = function() {
     boardModule.taskList.innerHTML = ``;
@@ -305,23 +305,25 @@ boardModuleFunc.prototype.editBoardFunc = function(e) {
 }
 boardModuleFunc.prototype.addListFunc = function(e) {
     e.preventDefault();
-    boardModule.boardData.stats[0]++;
-    boardModule.boardData.stats[2]++;
-    let list = { "i": boardModule.boardData.stats[0], "n": this.name.value, "d": this.desc.value, "ts": [], s: 0 };
-    boardModule.boardData.tasks.push(list);
+    [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks] = [boardModule.boardData.stats, boardModule.boardData.tasks];
+    boardModule.tempBoardData.stats[0]++;
+    boardModule.tempBoardData.stats[2]++;
+    let list = { "i": boardModule.tempBoardData.stats[0], "n": this.name.value, "d": this.desc.value, "ts": [], s: 0 };
+    boardModule.tempBoardData.tasks.push(list);
     appModule.smallLoadingFunc(addListForm);
-    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
+    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.tempBoardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.tempBoardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
-            this.reset();
+            [boardModule.boardData.stats, boardModule.boardData.tasks] = [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks];
             boardModule.taskList.appendChild(boardModule.listElementFunc(list));
             coreModule.closeModalFunc('addListModalID');
         })
         .catch(function(error) {
-            boardModule.boardData.stats[2]--;
-            boardModule.boardData.tasks.pop();
             appModule.createAlertBoxFunc(boardModule.addListForm, "Cannot Create List", 1, "exclamation");
         })
-        .then(function() { document.getElementById('loadingIconID').remove(); });
+        .then(function() {
+            document.getElementById('loadingIconID').remove();
+            addListForm.reset();
+        });
 }
 boardModuleFunc.prototype.findList = function(id) {
     for (let i = 0; i < boardModule.boardData.tasks.length; i++) {
@@ -341,20 +343,17 @@ boardModuleFunc.prototype.findTask = function(id) {
 }
 boardModuleFunc.prototype.editListFunc = function(e) {
     e.preventDefault();
+    [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks] = [boardModule.boardData.stats, boardModule.boardData.tasks];
     boardModule.findList(boardModule.selectedListElem.data);
-    let bk = { n: boardModule.boardData.tasks[boardModule.selectedList].n, d: boardModule.boardData.tasks[boardModule.selectedList].d, s: boardModule.boardData.tasks[boardModule.selectedList].s };
-    boardModule.boardData.tasks[boardModule.selectedList].n = this.name.value;
-    boardModule.boardData.tasks[boardModule.selectedList].d = this.desc.value;
+    [boardModule.tempBoardData.tasks[boardModule.selectedList].n, boardModule.tempBoardData.tasks[boardModule.selectedList].d] = [this.name.value, this.desc.value];
     appModule.smallLoadingFunc(editListForm);
-    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
+    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.tempBoardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
-            boardModule.selectedListElem.childNodes[0].childNodes[0].childNodes[0].innerHTML = this.name.value;
-            boardModule.selectedListElem.childNodes[0].childNodes[1].innerHTML = this.desc.value;
+            [boardModule.boardData.stats, boardModule.boardData.tasks] = [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks];
+            [boardModule.selectedListElem.childNodes[0].childNodes[0].childNodes[0].innerHTML, boardModule.selectedListElem.childNodes[0].childNodes[1].innerHTML] = [this.name.value, this.desc.value];
             appModule.createAlertBoxFunc(boardModule.editListForm, "Succesfully Updated List", 1, "check");
         })
         .catch(function(error) {
-            boardModule.boardData.tasks[boardModule.selectedList].n = bk.n;
-            boardModule.boardData.tasks[boardModule.selectedList].d = bk.d;
             appModule.createAlertBoxFunc(boardModule.editListForm, "Cannot Update List", 1, "exclamation");
         })
         .then(function() { document.getElementById('loadingIconID').remove(); });
@@ -362,46 +361,47 @@ boardModuleFunc.prototype.editListFunc = function(e) {
 boardModuleFunc.prototype.addTaskFunc = function(e) {
     e.preventDefault();
     let dt = new Date();
+    [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks] = [boardModule.boardData.stats, boardModule.boardData.tasks];
     boardModule.findList(boardModule.selectedListElem.data);
-    boardModule.boardData.stats[1]++;
-    boardModule.boardData.stats[3]++;
-    let task = { "i": boardModule.boardData.stats[1], "li": boardModule.selectedListElem.data, "c": this.content.value, "s": boardModule.boardData.tasks[boardModule.selectedList].s, "dd": dt.getDate(), "dm": (dt.getMonth() + 1), "dy": dt.getFullYear(), "us": appModule.userData.email };
-    boardModule.boardData.stats[4] += task.s ? 1 : 0;
-    boardModule.boardData.tasks[boardModule.selectedList].ts.push(task);
+    boardModule.tempBoardData.stats[1]++;
+    boardModule.tempBoardData.stats[3]++;
+    let task = { "i": boardModule.tempBoardData.stats[1], "li": boardModule.selectedListElem.data, "c": this.content.value, "s": boardModule.boardData.tasks[boardModule.selectedList].s, "dd": dt.getDate(), "dm": (dt.getMonth() + 1), "dy": dt.getFullYear(), "us": appModule.userData.email };
+    boardModule.tempBoardData.stats[4] += task.s ? 1 : 0;
+    boardModule.tempBoardData.tasks[boardModule.selectedList].ts.push(task);
     appModule.smallLoadingFunc(addTaskForm);
-    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
+    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.tempBoardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.tempBoardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
-            boardModule.selectedListElem.childNodes[0].children[0].children[1].innerHTML = boardModule.boardData.tasks[boardModule.selectedList].ts.length;
-            boardModule.selectedListElem.childNodes[0].childNodes[5].appendChild(boardModule.taskElemFunc(task));
-            this.reset();
+            [boardModule.boardData.stats, boardModule.boardData.tasks] = [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks];
+            document.getElementById(`${boardModule.selectedListElem.data}ListTotalID`).innerHTML = boardModule.boardData.tasks[boardModule.selectedList].ts.length;
+            document.getElementById(`${boardModule.selectedListElem.data}TaskListID`).appendChild(boardModule.taskElemFunc(task));
             coreModule.closeModalFunc('addTaskModalID');
         })
         .catch(function(error) {
-            boardModule.boardData.stats[3]--;
-            boardModule.boardData.tasks[boardModule.selectedList].ts.pop();
             appModule.createAlertBoxFunc(boardModule.addTaskForm, "Cannot Add Task", 1, "exclamation");
         })
-        .then(function() { document.getElementById('loadingIconID').remove(); });
+        .then(function() {
+            document.getElementById('loadingIconID').remove();
+            addTaskForm.reset();
+        });
 }
 boardModuleFunc.prototype.editTaskFunc = function(e) {
     e.preventDefault();
     boardModule.findList(boardModule.selectedTaskElem.datali);
     boardModule.findTask(boardModule.selectedTaskElem.data);
-    let bk = { c: boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].c, s: boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s };
-    boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].c = this.content.value;
-    boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s = this.status.checked ? 1 : 0;
-    if (boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s != bk.s) {
-        boardModule.boardData.stats[4] += this.status.checked ? 1 : -1;
+    [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks] = [boardModule.boardData.stats, boardModule.boardData.tasks];
+    boardModule.tempBoardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].c = this.content.value;
+    boardModule.tempBoardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s = this.status.checked ? 1 : 0;
+    if (boardModule.tempBoardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s != boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s) {
+        boardModule.tempBoardData.stats[4] += this.status.checked ? 1 : -1;
     }
     appModule.smallLoadingFunc(editTaskForm);
-    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
+    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.tempBoardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.tempBoardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
-            boardModule.selectedTaskElem.childNodes[0].childNodes[0].innerHTML = this.content.value;
-            document.getElementById("viewTaskTabID").children[0].children[2].innerHTML = this.content.value;
+            [boardModule.boardData.stats, boardModule.boardData.tasks] = [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks];
+            [boardModule.selectedTaskElem.childNodes[0].childNodes[0].innerHTML, document.getElementById("viewTaskTabID").children[0].children[2].innerHTML] = [this.content.value, this.content.value];
             appModule.createAlertBoxFunc(boardModule.editTaskForm, "Succesfully Updated Task", 1, "check");
         })
         .catch(function(error) {
-            boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].c = bk.c;
             appModule.createAlertBoxFunc(boardModule.editTaskForm, "Cannot Update Task", 1, "exclamation");
         })
         .then(function() { document.getElementById('loadingIconID').remove(); });
@@ -452,47 +452,39 @@ boardModuleFunc.prototype.deleteBoardFunc = function() {
         });
 }
 boardModuleFunc.prototype.deleteListFunc = function() {
-    let bk = [...boardModule.boardData.tasks];
+    [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks] = [boardModule.boardData.stats, boardModule.boardData.tasks];
     boardModule.findList(boardModule.selectedListElem.data);
-    boardModule.boardData.stats[2]--;
-    for (let i = 0; i < boardModule.boardData.tasks[boardModule.selectedList].ts.length; i++) {
-        boardModule.boardData.stats[3]--;
-        boardModule.boardData.stats[4] += boardModule.boardData.tasks[boardModule.selectedList].ts[i].s ? -1 : 0;
+    boardModule.tempBoardData.stats[2]--;
+    for (let i = 0; i < boardModule.tempBoardData.tasks[boardModule.selectedList].ts.length; i++) {
+        boardModule.tempBoardData.stats[3]--;
+        boardModule.tempBoardData.stats[4] += boardModule.tempBoardData.tasks[boardModule.selectedList].ts[i].s ? -1 : 0;
     }
-    boardModule.boardData.tasks.splice(boardModule.selectedList, 1);
-    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
+    boardModule.tempBoardData.tasks.splice(boardModule.selectedList, 1);
+    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.tempBoardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.tempBoardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
+            [boardModule.boardData.stats, boardModule.boardData.tasks] = [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks];
             boardModule.selectedListElem.remove();
             coreModule.closeModalFunc('editListModalID');
         })
-        .catch(function(error) {
-            boardModule.boardData.stats[2]++;
-            boardModule.boardData.tasks = bk;
-            for (let i = 0; i < bk[boardModule.selectedList].ts.length; i++) {
-                boardModule.boardData.stats[3]++;
-                boardModule.boardData.stats[4] += bk[boardModule.selectedList].ts[i].s ? 1 : 0;
-            }
-        });
+        .catch(function(error) {});
 }
 boardModuleFunc.prototype.deleteTaskFunc = function() {
-    boardModule.boardData.stats[3]--;
-    boardModule.findList();
-    boardModule.findTask();
-    if (boardModule.boardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s == 1) {
-        boardModule.boardData.stats[4]--;
+    [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks] = [boardModule.boardData.stats, boardModule.boardData.tasks];
+    boardModule.tempBoardData.stats[3]--;
+    boardModule.findList(boardModule.selectedTaskElem.datali);
+    boardModule.findTask(boardModule.selectedTaskElem.data);
+    if (boardModule.tempBoardData.tasks[boardModule.selectedList].ts[boardModule.selectedTask].s == 1) {
+        boardModule.tempBoardData.stats[4]--;
     }
-    let bk = [...boardModule.boardData.tasks[boardModule.selectedList].ts];
-    boardModule.boardData.tasks[boardModule.selectedList].ts.splice(boardModule.selectedTask, 1);
-    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.boardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.boardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
+    boardModule.tempBoardData.tasks[boardModule.selectedList].ts.splice(boardModule.selectedTask, 1);
+    fetch("/user/board/update/task?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{"stats" : "${JSON.stringify(boardModule.tempBoardData.stats)}" ,"tasks" : ${JSON.stringify(JSON.stringify(boardModule.tempBoardData.tasks))} , "id" : "${boardModule.boardData.id}"}` }).then(data => data.json())
         .then(data => {
+            [boardModule.boardData.stats, boardModule.boardData.tasks] = [boardModule.tempBoardData.stats, boardModule.tempBoardData.tasks];
             document.getElementById(`${boardModule.boardData.tasks[boardModule.selectedList].i}ListTotalID`).innerHTML = boardModule.boardData.tasks[boardModule.selectedList].ts.length;
             boardModule.selectedTaskElem.remove();
             coreModule.closeModalFunc('viewTaskModalID');
         })
-        .catch(function(error) {
-            boardModule.boardData.stats[3]++;
-            boardModule.boardData.tasks[boardModule.selectedList].ts = bk;
-        });
+        .catch(function(error) {});
 }
 let boardModule = new boardModuleFunc();
 window.addEventListener("load", appModule.initFunc);
