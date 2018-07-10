@@ -184,6 +184,8 @@ function boardModuleFunc() {
     this.boardList = document.getElementById('boardListID');
     this.boardDetail = document.getElementById(`boardDetailID`);
     this.taskList = document.getElementById(`taskListID`);
+    this.findField = document.getElementById('findFieldID');
+    this.findResult = document.getElementById('findResultID');
     this.boardsData = [];
     this.boardData = {};
     this.tempBoardData = {};
@@ -195,8 +197,22 @@ function boardModuleFunc() {
     this.editBoardForm.addEventListener('submit', this.editBoardFunc);
     this.addListForm.addEventListener('submit', this.addListFunc);
     this.editListForm.addEventListener('submit', this.editListFunc);
+    this.findField.addEventListener('input', this.findFunc);
     this.addTaskForm.addEventListener('submit', this.addTaskFunc);
     this.editTaskForm.addEventListener('submit', this.editTaskFunc);
+}
+boardModuleFunc.prototype.findFunc = function(e) {
+    e.preventDefault();
+    let qry = new RegExp(this.value,"i");
+    let res = ``;
+    boardModule.findResult.innerHTML = '';
+    if(this.value == "") {return;}
+    for(let i = 0; i < boardModule.boardsData.length; i++) {
+        if (boardModule.boardsData[i].name.search(qry) != -1 || boardModule.boardsData[i].desc.search(qry) != -1) {
+            res = res + `<a style="cursor: pointer;" onclick='javascript: window.location.hash = "/board/${boardModule.boardsData[i].id}";'>${boardModule.boardsData[i].name}</a><br><font class="text-muted">${boardModule.boardsData[i].desc}</font><br><br>`;
+        }
+    }
+    boardModule.findResult.innerHTML = res;
 }
 boardModuleFunc.prototype.prepEditBoardModalFunc = function(e) {
     coreModule.showModalFunc('editBoardModalID');
@@ -220,7 +236,7 @@ boardModuleFunc.prototype.boardElementFunc = function(data) {
     let el = document.createElement('div');
     el.className = "card";
     let date = new Date(data.created_at);
-    el.innerHTML = `<div class="card-body"><h4 class="card-title" style="cursor: pointer;" onclick='javascript: window.location.hash = "/board/${data.id}";''>${data.name}</h4><h6 class="card-subtitle mb-2 text-muted">${data.desc}</h6><i class="far fa-calendar-alt color"></i> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}<br><center>
+    el.innerHTML = `<div class="card-body"><h4 class="card-title" style="cursor: pointer;" onclick='javascript: window.location.hash = "/board/${data.id}";'>${data.name}</h4><h6 class="card-subtitle mb-2 text-muted">${data.desc}</h6><i class="far fa-calendar-alt color"></i> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}<br><center>
     <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
     <div class="d-none"><br><h3><font class="text-muted">${data.stats[4]}</font><font style="color: var(--blue);">/</font>${data.stats[3]}</h3>
     <div class="progress"><div class="progress-bar" role="progressbar" style="width: ${(data.stats[4]/data.stats[3])*100}%" aria-valuenow="${(data.stats[4]/data.stats[3])*100}" aria-valuemin="0" aria-valuemax="100"></div></div><b class="text-muted"> Progress</b></div></center></div>`;

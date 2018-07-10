@@ -151,6 +151,7 @@
         <hr>
         <a style="cursor: pointer; color: #fff;" class="btn btn-danger card-link" onclick="javascript: coreModule.showModalFunc('addBoardModalID');appModule.colorPaletteFunc(boardModule.addBoardForm, 0);"><i class="fas fa-plus"></i> Add Board</a>
         <a style="cursor: pointer; color: var(--blue);" href="/#/welcome" class="card-link"><i class="fas fa-power-off"></i> LogOut</a>
+        <a style="cursor: pointer; color: #fff;" onclick="javascript: coreModule.showModalFunc('findModalID');     boardModule.findResult.innerHTML = ''; boardModule.findField.value = '';" class="btn btn-danger card-link"><i class="fas fa-search"></i> Find</a>
         <a style="cursor: pointer; color: var(--blue);" onclick="userModule.prepProfileModalFunc()" class="card-link"><i class="far fa-user"></i> View Profile</a>
         <hr>
         <div id="boardListID" class="card-columns"></div>
@@ -180,29 +181,29 @@
                             <div id="userInfoID" class="row"></div>
                         </div>
                         <div class="tab-pane">
-                                    <form name="editUserForm">
-                                        <div class="form-group">
-                                            <label class="label">Name</label>
-                                            <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
-                                        </div>
-                                             <div class="form-group">
-                                            <label class="label">New Password</label>
-                                            <input type="password" class="form-control" name="digest" minlength="5" placeholder="New Password..">
-                                          <small id="emailHelp" class="form-text text-muted">Only Fill If You Want To Change</small>  
-                                        </div>
-                                        <input type="hidden" class="form-control" name="cs" value="0">
-                                        <div class="form-group" style="padding: 6px; text-align: center;  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);">
-                                            <i class="fas fa-palette fa-2x mb-2" style="color: var(--blue);"></i>
-                                            <br>
-                                            <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
-                                            <div class="row d-none" style="margin-left: 1px; margin-right: 1px; border: 1px solid #efefef; padding: 6px;
+                            <form name="editUserForm">
+                                <div class="form-group">
+                                    <label class="label">Name</label>
+                                    <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="label">New Password</label>
+                                    <input type="password" class="form-control" name="digest" minlength="5" placeholder="New Password..">
+                                    <small id="emailHelp" class="form-text text-muted">Only Fill If You Want To Change</small>
+                                </div>
+                                <input type="hidden" class="form-control" name="cs" value="0">
+                                <div class="form-group" style="padding: 6px; text-align: center;  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);">
+                                    <i class="fas fa-palette fa-2x mb-2" style="color: var(--blue);"></i>
+                                    <br>
+                                    <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
+                                    <div class="row d-none" style="margin-left: 1px; margin-right: 1px; border: 1px solid #efefef; padding: 6px;
 ">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
-                                        </div>
-                                    </form>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -251,11 +252,29 @@
         <hr>
         <div id="taskListID" class="card-columns"></div>
     </div>
+    <div class="modal" id="findModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-search color"></i> Find</h5>
+                    <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('findModalID')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" id="findFieldID" class="form-control" placeholder="Search.." aria-describedby="basic-addon2">
+                    </div>
+                    <div id="findResultID"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal" id="editBoardModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit color"></i> Edit Board</h5>
+                    <h5 class="modal-title"><i class="fas fa-edit color"></i> Edit Board</h5>
                     <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('editBoardModalID')">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -293,7 +312,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-plus color"></i> Add New List</h5>
+                    <h5 class="modal-title"><i class="fas fa-plus color"></i> Add New List</h5>
                     <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('addListModalID')">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -321,7 +340,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-bars color"></i> View List</h5>
+                    <h5 class="modal-title"><i class="fas fa-bars color"></i> View List</h5>
                     <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('editListModalID');">
                         <span aria-hidden="true">&times;</span>
                     </button>
