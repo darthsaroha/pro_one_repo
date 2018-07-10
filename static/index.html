@@ -8,78 +8,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/assets/css/bundle.css">
     <style type="text/css">
-body {
-    padding-top: 30px;
-}
+    body {
+        padding-top: 30px;
+    }
+
     .nav-pills .nav-link.active:hover,
     .nav-pills .show>.nav-link {
         color: #fff;
     }
+
     .modal-header {
         border-bottom: 2px solid #fff;
     }
-    .loaderln,
-.loaderln:before,
-.loaderln:after {
-  border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation: load7 1.8s infinite ease-in-out;
-  animation: load7 1.8s infinite ease-in-out;
-}
-.loaderln {
-  color: var(--blue);
-  font-size: 7px;
-  margin: 15% auto;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  position: absolute;
-  text-indent: -9999em;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
-}
-.loaderln:before,
-.loaderln:after {
-  content: '';
-  position: absolute;
-  top: 0;
-}
-.loaderln:before {
-  left: -3.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-.loaderln:after {
-  left: 3.5em;
-}
-@-webkit-keyframes load7 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 2.5em 0 -1.3em;
-  }
-  40% {
-    box-shadow: 0 2.5em 0 0;
-  }
-}
-@keyframes load7 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 2.5em 0 -1.3em;
-  }
-  40% {
-    box-shadow: 0 2.5em 0 0;
-  }
-}
 
+    .loaderln,
+    .loaderln:before,
+    .loaderln:after {
+        border-radius: 50%;
+        width: 2.5em;
+        height: 2.5em;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        -webkit-animation: load7 1.8s infinite ease-in-out;
+        animation: load7 1.8s infinite ease-in-out;
+    }
+
+    .loaderln {
+        color: var(--blue);
+        font-size: 7px;
+        margin: 15% auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+        text-indent: -9999em;
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+    }
+
+    .loaderln:before,
+    .loaderln:after {
+        content: '';
+        position: absolute;
+        top: 0;
+    }
+
+    .loaderln:before {
+        left: -3.5em;
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+    }
+
+    .loaderln:after {
+        left: 3.5em;
+    }
+
+    @-webkit-keyframes load7 {
+        0%,
+        80%,
+        100% {
+            box-shadow: 0 2.5em 0 -1.3em;
+        }
+        40% {
+            box-shadow: 0 2.5em 0 0;
+        }
+    }
+
+    @keyframes load7 {
+        0%,
+        80%,
+        100% {
+            box-shadow: 0 2.5em 0 -1.3em;
+        }
+        40% {
+            box-shadow: 0 2.5em 0 0;
+        }
+    }
     </style>
 </head>
 
@@ -139,12 +147,67 @@ body {
     </div>
     <div class="container d-none" id="dashboardPageID">
         <h3><i class="fas fa-leaf color"></i> Dashboard</h3>
-        <font class="text-muted">Showing All Your Boards</font><hr>
-                <a style="cursor: pointer; color: #fff;" class="btn btn-danger card-link" onclick="javascript: coreModule.showModalFunc('addBoardModalID');appModule.colorPaletteFunc(boardModule.addBoardForm, 0);"><i class="fas fa-plus"></i> Add Board</a>
-                   <a style="cursor: pointer; color: var(--blue);" href="/#/welcome" class="card-link"><i class="fas fa-power-off"></i> LogOut</a>
-                <a style="cursor: pointer; color: var(--blue);" class="card-link"><i class="far fa-user"></i> View Profile</a>
+        <font class="text-muted">Showing All Your Boards</font>
+        <hr>
+        <a style="cursor: pointer; color: #fff;" class="btn btn-danger card-link" onclick="javascript: coreModule.showModalFunc('addBoardModalID');appModule.colorPaletteFunc(boardModule.addBoardForm, 0);"><i class="fas fa-plus"></i> Add Board</a>
+        <a style="cursor: pointer; color: var(--blue);" href="/#/welcome" class="card-link"><i class="fas fa-power-off"></i> LogOut</a>
+        <a style="cursor: pointer; color: var(--blue);" onclick="userModule.prepProfileModalFunc()" class="card-link"><i class="far fa-user"></i> View Profile</a>
         <hr>
         <div id="boardListID" class="card-columns"></div>
+    </div>
+    <div class="modal" id="viewProfileModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-bars color"></i> View Profile</h5>
+                    <button type="button" style="outline: 0;" class="close" onclick="coreModule.closeModalFunc('viewProfileModalID')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-pills nav-fill" style="    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+">
+                        <li class="nav-item">
+                            <a class="nav-link active" style="cursor: pointer;" onclick="javascript: this.className = 'nav-link active'; this.parentNode.parentNode.children[1].children[0].className = 'nav-link'; document.getElementById('viewProfileTabID').children[1].className = 'tab-pane'; document.getElementById('viewProfileTabID').children[0].className = 'tab-pane active';">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="cursor: pointer;" onclick="javascript: this.className = 'nav-link active'; this.parentNode.parentNode.children[0].children[0].className = 'nav-link'; document.getElementById('viewProfileTabID').children[0].className = 'tab-pane'; document.getElementById('viewProfileTabID').children[1].className = 'tab-pane active';">Edit</a>
+                        </li>
+                    </ul>
+                    <br>
+                    <div class="tab-content" id="viewProfileTabID">
+                        <div class="tab-pane active">
+                            <div id="userInfoID" class="row"></div>
+                        </div>
+                        <div class="tab-pane">
+                                    <form name="editUserForm">
+                                        <div class="form-group">
+                                            <label class="label">Name</label>
+                                            <input type="text" class="form-control" name="name" minlength="5" placeholder="Name.." required>
+                                        </div>
+                                             <div class="form-group">
+                                            <label class="label">New Password</label>
+                                            <input type="password" class="form-control" name="digest" minlength="5" placeholder="New Password..">
+                                          <small id="emailHelp" class="form-text text-muted">Only Fill If You Want To Change</small>  
+                                        </div>
+                                        <input type="hidden" class="form-control" name="cs" value="0">
+                                        <div class="form-group" style="padding: 6px; text-align: center;  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);">
+                                            <i class="fas fa-palette fa-2x mb-2" style="color: var(--blue);"></i>
+                                            <br>
+                                            <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
+                                            <div class="row d-none" style="margin-left: 1px; margin-right: 1px; border: 1px solid #efefef; padding: 6px;
+">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary" name="submit"> <b> Edit</b></button>
+                                        </div>
+                                    </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="modal" id="addBoardModalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog" role="document">

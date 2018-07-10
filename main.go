@@ -97,10 +97,10 @@ func main() {
 		}
 		u.genKeys()
 		res.Header().Set("Content-Type", "application/json")
-		res.Write([]byte("{\"hemail\": \"" + getMD5Hash(u.Email) + "\",\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
+		res.Write([]byte("{\"created_at\": \"" + u.Created_at + "\",\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
 	})
 	/////////////////////////////////////////////
-	mux.HandleFunc("/user/update/conf", func(res http.ResponseWriter, req *http.Request) {
+	mux.HandleFunc("/user/update", func(res http.ResponseWriter, req *http.Request) {
 		var u user
 		defer req.Body.Close()
 		if json.NewDecoder(req.Body).Decode(&u) != nil {
@@ -111,11 +111,20 @@ func main() {
 			http.Error(res, "NOACS", 500)
 			return
 		}
-		stm, _ := db.Prepare("UPDATE pr_one_users SET uconf = ? ,uupdated_at = ? WHERE uid = ?;")
-		defer stm.Close()
-		if _, err := stm.Exec(u.Conf, time.Now(), u.Auth[0]); err != nil {
-			http.Error(res, "NOUPD", 500)
-			return
+		if u.Password_digest != "" {
+			stm, _ := db.Prepare("UPDATE pr_one_users SET uname = ? , upassword_digest = ?, uconf = ? ,uupdated_at = ? WHERE uid = ?;")
+			defer stm.Close()
+			if _, err := stm.Exec(u.Name, encode(u.Password_digest), u.Conf, time.Now(), u.Auth[0]); err != nil {
+				http.Error(res, "NOUPD", 500)
+				return
+			}
+		} else {
+			stm, _ := db.Prepare("UPDATE pr_one_users SET uname = ?, uconf = ? ,uupdated_at = ? WHERE uid = ?;")
+			defer stm.Close()
+			if _, err := stm.Exec(u.Name, u.Conf, time.Now(), u.Auth[0]); err != nil {
+				http.Error(res, "NOUPD", 500)
+				return
+			}
 		}
 		res.Header().Set("Content-Type", "application/json")
 		res.Write([]byte("{\"status\" : \"Updated\"}"))
@@ -139,8 +148,9 @@ func main() {
 			return
 		}
 		u.genKeys()
+		u.Created_at = time.Now().String()
 		res.Header().Set("Content-Type", "application/json")
-		res.Write([]byte("{\"hemail\": \"" + getMD5Hash(u.Email) + "\",\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
+		res.Write([]byte("{\"created_at\": \"" + u.Created_at + "\",\"name\" : \"" + u.Name + "\",\"conf\" : " + u.Conf + ",\"email\" : \"" + u.Email + "\",\"auth\" : [\"" + u.Auth[0] + "\",\"" + u.Auth[1] + "\",\"" + u.Auth[2] + "\"]}"))
 	})
 	/////////////////////////////////////////////
 	mux.HandleFunc("/user/boards", func(res http.ResponseWriter, req *http.Request) {

@@ -122,8 +122,11 @@ let appModule = new appModuleFunc();
 function userModuleFunc() {
     this.loginForm = document.querySelector(`form[name="loginForm"]`);
     this.joinForm = document.querySelector(`form[name="joinForm"]`);
+    this.editUserForm = document.querySelector(`form[name="editUserForm"]`);
     this.loginForm.addEventListener('submit', this.loginFunc);
     this.joinForm.addEventListener('submit', this.joinFunc);
+    this.editUserForm.addEventListener('submit', this.editUserFunc);
+    this.userInfo = document.getElementById('userInfoID');
 }
 userModuleFunc.prototype.loginFunc = function(e) {
     e.preventDefault();
@@ -145,6 +148,28 @@ userModuleFunc.prototype.joinFunc = function(e) {
             window.location.hash = "/";
         })
         .catch(function(error) { appModule.createAlertBoxFunc(userModule.joinForm, "Cannot Create Record", 1, "exclamation"); })
+        .then(function() { document.getElementById('loadingIconID').remove(); });
+}
+userModuleFunc.prototype.prepProfileModalFunc = function() {
+    coreModule.showModalFunc('viewProfileModalID');
+    [editUserForm.name.value, editUserForm.digest.value] = [appModule.userData.name, ""];
+    appModule.colorPaletteFunc(userModule.editUserForm, appModule.userData.conf.cs);
+    if (userModule.userInfo.children.length > 1) { return; }
+    let date = new Date(appModule.userData.created_at);
+    userModule.userInfo.innerHTML = `<div class="col-3" style="text-align: center;"><img class="mr-3 img-responsive" src="https://www.gravatar.com/avatar/${md5(appModule.userData.email)}" alt=""></div><div class="col-9"><b class="text-muted">User Name</b><br><span id="userNameID">${appModule.userData.name}</span><br><b class="text-muted">Email</b><br>${appModule.userData.email}<br><br><b class="text-muted">Joined On</b><br><i class="far fa-calendar-alt color"></i> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}</div>`;
+}
+userModuleFunc.prototype.editUserFunc = function(e) {
+    e.preventDefault();
+    appModule.smallLoadingFunc(editUserForm);
+    fetch("/user/update?auth0=" + appModule.userData.auth[0] + "&auth2=" + appModule.userData.auth[2], { method: 'post', headers: { "Content-type": "application/x-www-form-urlencoded; charset=UTF-8" }, body: `{ "name" : "${this.name.value}", "digest": "${this.digest.value}","conf" : "{\\"cs\\":${this.cs.value}}"}` }).then(data => data.json())
+        .then(data => {
+            [appModule.userData.name, appModule.userData.conf] = [this.name.value, { cs: this.cs.value }];
+            localStorage.setItem("userData", JSON.stringify(appModule.userData));
+            document.getElementById('userNameID').innerHTML = this.name.value;
+            document.documentElement.style.setProperty('--blue', appModule.colorSchemes[appModule.userData.conf.cs]);
+            appModule.createAlertBoxFunc(userModule.editUserForm, "Succesfully Updated User", 1, "check");
+        })
+        .catch(function(error) { appModule.createAlertBoxFunc(userModule.editUserForm, "Cannot Update User", 1, "exclamation"); })
         .then(function() { document.getElementById('loadingIconID').remove(); });
 }
 let userModule = new userModuleFunc();
@@ -195,7 +220,7 @@ boardModuleFunc.prototype.boardElementFunc = function(data) {
     let el = document.createElement('div');
     el.className = "card";
     let date = new Date(data.created_at);
-    el.innerHTML = `<div class="card-body"><h4 class="card-title" style="cursor: pointer;" onclick='javascript: window.location.hash = "/board/${data.id}";''>${data.name}</h4><h6 class="card-subtitle mb-2 text-muted">${data.desc}</h6><i class="far fa-calendar-alt color"></i> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}<hr style="margin-left: -20px; margin-right: -20px;"><center>
+    el.innerHTML = `<div class="card-body"><h4 class="card-title" style="cursor: pointer;" onclick='javascript: window.location.hash = "/board/${data.id}";''>${data.name}</h4><h6 class="card-subtitle mb-2 text-muted">${data.desc}</h6><i class="far fa-calendar-alt color"></i> ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}<br><center>
     <i class="fas fa-angle-down fa-2x" style="cursor: pointer; color: #888;" onclick="javascript: this.nextElementSibling.classList.toggle('d-none'); if(this.classList.contains('fa-angle-down')) {this.className='fas fa-angle-up fa-2x';}else {this.className='fas fa-angle-down fa-2x';}"></i>
     <div class="d-none"><br><h3><font class="text-muted">${data.stats[4]}</font><font style="color: var(--blue);">/</font>${data.stats[3]}</h3>
     <div class="progress"><div class="progress-bar" role="progressbar" style="width: ${(data.stats[4]/data.stats[3])*100}%" aria-valuenow="${(data.stats[4]/data.stats[3])*100}" aria-valuemin="0" aria-valuemax="100"></div></div><b class="text-muted"> Progress</b></div></center></div>`;
@@ -212,6 +237,7 @@ boardModuleFunc.prototype.listElementFunc = function(data) {
     }
     el.childNodes[0].childNodes[0].addEventListener('click', function(e) {
         boardModule.editListForm.name.value = data.n;
+        responsive
         boardModule.editListForm.desc.value = data.d;
         boardModule.selectedListElem = el;
         coreModule.showModalFunc('editListModalID');
